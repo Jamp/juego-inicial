@@ -36,7 +36,7 @@ Juego clásico de memoria adaptado para niños pequeños con solo 4 pares.
 
 ### Requisitos Previos
 - Node.js (versión 16 o superior)
-- npm o yarn
+- pnpm (gestor de paquetes recomendado)
 
 ### Instalación
 
@@ -46,10 +46,10 @@ git clone <url-del-repositorio>
 cd juego-inicial
 
 # Instalar dependencias
-npm install
+pnpm install
 
 # Iniciar servidor de desarrollo
-npm run dev
+pnpm dev
 ```
 
 El juego estará disponible en `http://localhost:5173/`
@@ -57,7 +57,7 @@ El juego estará disponible en `http://localhost:5173/`
 ### Compilar para Producción
 
 ```bash
-npm run build
+pnpm build
 ```
 
 Los archivos compilados estarán en la carpeta `dist/`.

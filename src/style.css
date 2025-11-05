@@ -1,26 +1,31 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  body {
-    @apply m-0 min-h-screen bg-gradient-to-br from-purple-400 via-pink-300 to-blue-300;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-  }
-
-  * {
-    @apply box-border;
-  }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, rgb(192 132 252), rgb(249 168 212), rgb(147 197 253));
+  font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
-@layer components {
-  .game-button {
-    @apply transform transition-all duration-200 hover:scale-110 active:scale-95;
-  }
+* {
+  box-sizing: border-box;
+}
 
-  .celebrate {
-    animation: celebrate 0.6s ease-in-out;
-  }
+.game-button {
+  transform: scale(1);
+  transition: all 200ms;
+}
+
+.game-button:hover {
+  transform: scale(1.1);
+}
+
+.game-button:active {
+  transform: scale(0.95);
+}
+
+.celebrate {
+  animation: celebrate 0.6s ease-in-out;
 }
 
 @keyframes celebrate {
