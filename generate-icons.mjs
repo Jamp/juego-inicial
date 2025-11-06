@@ -3,6 +3,24 @@ import { readFileSync } from 'fs';
 
 const starBuffer = readFileSync('./public/star.png');
 
+// Generar favicon.png con fondo degradado
+await sharp({
+  create: {
+    width: 64,
+    height: 64,
+    channels: 4,
+    background: { r: 102, g: 126, b: 234, alpha: 1 } // #667eea
+  }
+})
+  .composite([{
+    input: await sharp(starBuffer).resize(32, 32).toBuffer(),
+    gravity: 'center'
+  }])
+  .png()
+  .toFile('./public/favicon.png');
+
+console.log('✅ favicon.png generado');
+
 // Generar icon-192.png con fondo degradado
 await sharp({
   create: {
