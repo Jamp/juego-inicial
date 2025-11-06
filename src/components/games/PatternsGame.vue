@@ -1,20 +1,48 @@
 <script setup>
 import { ref, inject, onMounted } from 'vue'
 import GameLayout from '../GameLayout.vue'
+import patternImg from '../../assets/images/pattern.png'
 
 const gameState = inject('gameState')
 const sounds = inject('sounds')
 
+const titleIcon = patternImg
+
 const items = [
-  { id: 'star', emoji: '⭐', color: 'bg-yellow-400' },
-  { id: 'heart', emoji: '❤️', color: 'bg-red-400' },
-  { id: 'circle', emoji: '🔵', color: 'bg-blue-400' },
-  { id: 'flower', emoji: '🌸', color: 'bg-pink-400' },
-  { id: 'sun', emoji: '☀️', color: 'bg-orange-400' },
-  { id: 'moon', emoji: '🌙', color: 'bg-purple-400' }
+  {
+    id: 'star',
+    emoji: '⭐',
+    color: 'bg-yellow-400'
+  },
+  {
+    id: 'heart',
+    emoji: '❤️',
+    color: 'bg-red-400'
+  },
+  {
+    id: 'circle',
+    emoji: '🔵',
+    color: 'bg-blue-400'
+  },
+  {
+    id: 'flower',
+    emoji: '🌸',
+    color: 'bg-pink-400'
+  },
+  {
+    id: 'sun',
+    emoji: '☀️',
+    color: 'bg-orange-400'
+  },
+  {
+    id: 'moon',
+    emoji: '🌙',
+    color: 'bg-purple-400'
+  }
 ]
 
 const pattern = ref([])
+const previousPattern = ref(null)
 const missingIndex = ref(0)
 const correctAnswer = ref(null)
 const options = ref([])
@@ -25,13 +53,19 @@ const generateRound = () => {
 
   // Crear un patrón simple (2-3 elementos que se repiten)
   const patternLength = Math.random() > 0.5 ? 2 : 3
-  const basePattern = []
+  let basePattern = []
 
-  // Seleccionar elementos para el patrón base
-  const shuffledItems = [...items].sort(() => Math.random() - 0.5)
-  for (let i = 0; i < patternLength; i++) {
-    basePattern.push(shuffledItems[i])
-  }
+  // Seleccionar elementos para el patrón base, diferente al patrón anterior
+  do {
+    const shuffledItems = [...items].sort(() => Math.random() - 0.5)
+    basePattern = []
+    for (let i = 0; i < patternLength; i++) {
+      basePattern.push(shuffledItems[i])
+    }
+  } while (previousPattern.value &&
+           basePattern.map(p => p.id).join(',') === previousPattern.value)
+
+  previousPattern.value = basePattern.map(p => p.id).join(',')
 
   // Repetir el patrón 2-3 veces
   const repetitions = Math.floor(Math.random() * 2) + 2
@@ -70,7 +104,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <GameLayout title="🔷 Completa el Patrón" bg-color="bg-gradient-to-br from-pink-100 to-yellow-100">
+  <GameLayout title="Completa el Patrón" :title-icon="titleIcon" bg-color="bg-gradient-to-br from-pink-100 to-yellow-100">
     <div class="flex flex-col items-center justify-center gap-6 md:gap-8">
       <!-- Instrucción -->
       <div class="text-center">

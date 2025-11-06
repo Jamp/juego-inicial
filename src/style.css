@@ -4,7 +4,12 @@ body {
   margin: 0;
   min-height: 100vh;
   background: linear-gradient(to bottom right, rgb(192 132 252), rgb(249 168 212), rgb(147 197 253));
-  font-family: 'Comic Sans MS', cursive, sans-serif;
+  font-family: 'Baloo 2', 'Comic Sans MS', cursive, sans-serif;
+}
+
+/* Clase para mensajes de celebración que no usan Baloo 2 */
+.celebration-text {
+  font-family: 'Comic Sans MS', cursive, sans-serif !important;
 }
 
 * {

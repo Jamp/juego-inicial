@@ -1,11 +1,34 @@
 <script setup>
 import { ref, inject, onMounted } from 'vue'
 import GameLayout from '../GameLayout.vue'
+import questionImg from '../../assets/images/question.png'
+import memoryImg from '../../assets/images/memory.png'
+
+// Importar imágenes de animales para las cartas
+import dogImg from '../../assets/images/dog.png'
+import cowImg from '../../assets/images/cow.png'
+import chickenImg from '../../assets/images/chicken.png'
+import sheepImg from '../../assets/images/sheep.png'
+import porkImg from '../../assets/images/pork.png'
+import foxImg from '../../assets/images/fox.png'
+import catImg from '../../assets/images/cat.png'
+import pandaImg from '../../assets/images/panda.png'
+
+const allAnimalImages = [
+  dogImg,
+  cowImg,
+  sheepImg,
+  porkImg,
+  foxImg, 
+  catImg, 
+  pandaImg,
+  chickenImg
+]
 
 const gameState = inject('gameState')
 const sounds = inject('sounds')
 
-const emojis = ['🐶', '🐱', '🦊', '🐻', '🐼', '🐨', '🦁', '🐯']
+const titleIcon = memoryImg
 
 const cards = ref([])
 const flippedCards = ref([])
@@ -17,16 +40,19 @@ const generateRound = () => {
   flippedCards.value = []
   canFlip.value = true
 
-  // Crear pares de cartas (solo 4 pares para niños pequeños)
-  const selectedEmojis = emojis.slice(0, 4)
-  const pairs = [...selectedEmojis, ...selectedEmojis]
+  // Hacer shuffle del array completo de animales y tomar solo 4
+  const shuffledAnimals = [...allAnimalImages].sort(() => Math.random() - 0.5)
+  const selectedAnimals = shuffledAnimals.slice(0, 4)
+
+  // Crear pares de cartas (4 pares para niños pequeños)
+  const pairs = [...selectedAnimals, ...selectedAnimals]
 
   // Mezclar las cartas
   cards.value = pairs
     .sort(() => Math.random() - 0.5)
-    .map((emoji, index) => ({
+    .map((image, index) => ({
       id: index,
-      emoji,
+      image,
       isFlipped: false,
       isMatched: false
     }))
@@ -47,12 +73,12 @@ const flipCard = (card) => {
 
     const [card1, card2] = flippedCards.value
 
-    if (card1.emoji === card2.emoji) {
+    if (card1.image === card2.image) {
       // ¡Par encontrado!
       sounds.playCorrect()
       card1.isMatched = true
       card2.isMatched = true
-      matchedPairs.value.push(card1.emoji)
+      matchedPairs.value.push(card1.image)
       gameState.celebrate()
 
       // Verificar si se completó el juego
@@ -85,7 +111,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <GameLayout title="🃏 Memoria" bg-color="bg-gradient-to-br from-indigo-100 to-purple-100">
+  <GameLayout title="Memoria" :title-icon="titleIcon" bg-color="bg-gradient-to-br from-indigo-100 to-purple-100">
     <div class="flex flex-col items-center justify-center gap-6 md:gap-8">
       <!-- Instrucción -->
       <div class="text-center">
@@ -101,19 +127,17 @@ onMounted(() => {
           :key="card.id"
           @click="flipCard(card)"
           :class="[
-            card.isMatched ? 'opacity-50' : '',
-            card.isFlipped || card.isMatched ? 'card-flipped' : 'card-back'
+            card.isMatched ? 'opacity-50' : ''
           ]"
-          class="game-button aspect-square rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center text-5xl md:text-6xl"
-        >
+          class="game-button aspect-square rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 w-20 h-20 md:w-28 md:h-28">
           <div class="card-inner w-full h-full relative" :class="{ 'is-flipped': card.isFlipped || card.isMatched }">
             <!-- Parte frontal (oculta) -->
-            <div class="card-front absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl">
-              {{ card.emoji }}
+            <div class="card-front absolute inset-0 flex items-center justify-center bg-white rounded-2xl p-2">
+              <img :src="card.image" alt="Animal" class="w-full h-full object-contain" />
             </div>
             <!-- Parte trasera (visible por defecto) -->
-            <div class="card-back-side absolute inset-0 flex items-center justify-center bg-gradient-to-br from-pink-400 to-yellow-400 rounded-2xl">
-              <span class="text-4xl md:text-5xl">🎴</span>
+            <div class="card-back-side absolute inset-0 flex items-center justify-center bg-white rounded-2xl shadow-inner">
+              <img :src="questionImg" alt="?" class="w-16 h-16 md:w-20 md:h-20 object-contain" />
             </div>
           </div>
         </button>

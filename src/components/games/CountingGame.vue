@@ -2,19 +2,61 @@
 import { ref, inject, onMounted, computed } from 'vue'
 import GameLayout from '../GameLayout.vue'
 
+// Importar imágenes
+import appleImg from '../../assets/images/apple.png'
+import starImg from '../../assets/images/star.png'
+import ballonImg from '../../assets/images/ballon.png'
+import catImg from '../../assets/images/cat.png'
+import flowerImg from '../../assets/images/flower.png'
+import sunImg from '../../assets/images/sun.png'
+import cowImg from '../../assets/images/cow.png'
+import chickenImg from '../../assets/images/chicken.png'
+import dogImg from '../../assets/images/dog.png'
+
 const gameState = inject('gameState')
 const sounds = inject('sounds')
 
 const objects = [
-  { emoji: '🍎', name: 'manzanas' },
-  { emoji: '⭐', name: 'estrellas' },
-  { emoji: '🎈', name: 'globos' },
-  { emoji: '🐱', name: 'gatitos' },
-  { emoji: '🌸', name: 'flores' },
-  { emoji: '🦋', name: 'mariposas' }
+  {
+    image: appleImg,
+    name: 'manzanas'
+  },
+  {
+    image: starImg,
+    name: 'estrellas'
+  },
+  {
+    image: ballonImg,
+    name: 'globos'
+  },
+  {
+    image: catImg,
+    name: 'gatitos'
+  },
+  {
+    image: flowerImg,
+    name: 'flores'
+  },
+  {
+    image: sunImg,
+    name: 'soles'
+  },
+  {
+    image: cowImg,
+    name: 'Vaquitas'
+  },
+  {
+    image: dogImg,
+    name: 'Perritos'
+  },
+  {
+    image: chickenImg,
+    name: 'Pollitos'
+  }
 ]
 
 const currentObject = ref(null)
+const previousCount = ref(null)
 const targetCount = ref(0)
 const displayItems = ref([])
 const options = ref([])
@@ -26,14 +68,50 @@ const generateRound = () => {
   // Elegir objeto aleatorio
   currentObject.value = objects[Math.floor(Math.random() * objects.length)]
 
-  // Número aleatorio entre 1 y 10
-  targetCount.value = Math.floor(Math.random() * 5) + 1
+  // Número aleatorio entre 1 y 5, diferente al anterior
+  let newCount
+  do {
+    newCount = Math.floor(Math.random() * 5) + 1
+  } while (previousCount.value && newCount === previousCount.value)
 
-  // Crear array de items para mostrar con posiciones aleatorias
-  displayItems.value = Array(targetCount.value).fill(null).map((_, i) => ({
+  previousCount.value = targetCount.value
+  targetCount.value = newCount
+
+  // Crear array de items para mostrar con posiciones aleatorias sin superposición
+  const positions = []
+  const minDistance = 15 // Distancia mínima entre elementos (en %)
+
+  for (let i = 0; i < targetCount.value; i++) {
+    let attempts = 0
+    let position
+    let isValid = false
+
+    // Intentar encontrar una posición válida
+    while (!isValid && attempts < 50) {
+      position = {
+        top: Math.random() * 70 + 5,
+        left: Math.random() * 70 + 5
+      }
+
+      // Verificar que no esté muy cerca de otras posiciones
+      isValid = positions.every(pos => {
+        const distance = Math.sqrt(
+          Math.pow(pos.top - position.top, 2) +
+          Math.pow(pos.left - position.left, 2)
+        )
+        return distance >= minDistance
+      })
+
+      attempts++
+    }
+
+    positions.push(position)
+  }
+
+  displayItems.value = positions.map((pos, i) => ({
     id: i,
-    top: Math.random() * 70 + 5,
-    left: Math.random() * 70 + 5,
+    top: pos.top,
+    left: pos.left,
     delay: i * 0.1
   }))
 
@@ -72,12 +150,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <GameLayout title="🔢 ¡A Contar!" bg-color="bg-gradient-to-br from-green-100 to-blue-100">
+  <GameLayout title="¡A Contar!" bg-color="bg-gradient-to-br from-green-100 to-blue-100">
     <div class="flex flex-col items-center justify-center gap-6 md:gap-8">
       <!-- Instrucción -->
-      <div class="text-center">
+      <div class="text-center flex items-center justify-center gap-3">
         <p class="text-2xl md:text-3xl font-bold text-gray-700">
-          ¿Cuántos <span class="text-4xl">{{ currentObject?.emoji }}</span> hay?
+          ¿Cuántos
+        </p>
+        <img v-if="currentObject" :src="currentObject.image" :alt="currentObject.name" class="w-12 h-12 md:w-16 md:h-16 object-contain inline-block" />
+        <p class="text-2xl md:text-3xl font-bold text-gray-700">
+          hay?
         </p>
       </div>
 
@@ -91,9 +173,9 @@ onMounted(() => {
             left: item.left + '%',
             animationDelay: item.delay + 's'
           }"
-          class="absolute text-5xl md:text-6xl pop-in"
+          class="absolute pop-in"
         >
-          {{ currentObject?.emoji }}
+          <img v-if="currentObject" :src="currentObject.image" :alt="currentObject.name" class="w-12 h-12 md:w-16 md:h-16 object-contain" />
         </div>
       </div>
 

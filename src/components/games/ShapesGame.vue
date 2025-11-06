@@ -1,26 +1,56 @@
 <script setup>
 import { ref, inject, onMounted } from 'vue'
 import GameLayout from '../GameLayout.vue'
+import shapeImg from '../../assets/images/shape.png'
 
 const gameState = inject('gameState')
 const sounds = inject('sounds')
 
+const titleIcon = shapeImg
+
 const shapes = [
-  { id: 'circle', name: 'Círculo', icon: '●', color: 'bg-red-400' },
-  { id: 'triangle', name: 'Triángulo', icon: '▲', color: 'bg-blue-400' },
-  { id: 'square', name: 'Cuadrado', icon: '■', color: 'bg-green-400' },
-  { id: 'star', name: 'Estrella', icon: '★', color: 'bg-yellow-400' }
+  {
+    id: 'circle',
+    name: 'Círculo',
+    icon: '⬤',
+    color: 'bg-red-400'
+  },
+  {
+    id: 'triangle',
+    name: 'Triángulo',
+    icon: '▲',
+    color: 'bg-blue-400'
+  },
+  {
+    id: 'square',
+    name: 'Cuadrado',
+    icon: '■',
+    color: 'bg-green-400'
+  },
+  {
+    id: 'star',
+    name: 'Estrella',
+    icon: '★',
+    color: 'bg-yellow-400'
+  }
 ]
 
 const currentShape = ref(null)
+const previousShape = ref(null)
 const options = ref([])
 const showFeedback = ref(false)
 
 const generateRound = () => {
   showFeedback.value = false
 
-  // Elegir una forma aleatoria
-  currentShape.value = shapes[Math.floor(Math.random() * shapes.length)]
+  // Elegir una forma aleatoria diferente a la anterior
+  let newShape
+  do {
+    newShape = shapes[Math.floor(Math.random() * shapes.length)]
+  } while (previousShape.value && newShape.id === previousShape.value.id)
+
+  previousShape.value = currentShape.value
+  currentShape.value = newShape
 
   // Crear opciones (mezclar todas las formas)
   options.value = [...shapes].sort(() => Math.random() - 0.5)
@@ -51,7 +81,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <GameLayout title="🔷 Encuentra la Forma" bg-color="bg-gradient-to-br from-purple-100 to-pink-100">
+  <GameLayout title="Encuentra la Forma" :title-icon="titleIcon" bg-color="bg-gradient-to-br from-purple-100 to-pink-100">
     <div class="flex flex-col items-center justify-center gap-8 md:gap-12">
       <!-- Instrucción -->
       <div class="text-center">
@@ -61,8 +91,8 @@ onMounted(() => {
 
         <!-- Forma objetivo -->
         <div class="inline-block bg-white rounded-3xl p-8 md:p-12 shadow-xl">
-          <div :class="currentShape?.color" class="w-32 h-32 md:w-40 md:h-40 rounded-2xl flex items-center justify-center">
-            <span class="text-8xl md:text-9xl text-white drop-shadow-lg">
+          <div :class="currentShape?.color" class="w-32 h-32 md:w-40 md:h-40 rounded-2xl flex items-center justify-center shape-target">
+            <span class="text-8xl md:text-9xl text-white drop-shadow-lg leading-none">
               {{ currentShape?.icon }}
             </span>
           </div>
@@ -106,6 +136,19 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.shape-target {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shape-target span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
 .bounce-enter-active {
   animation: bounce-in 0.5s;
 }

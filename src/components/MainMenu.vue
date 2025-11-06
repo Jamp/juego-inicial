@@ -1,5 +1,10 @@
 <script setup>
 import { inject } from 'vue'
+import dogImg from '../assets/images/dog.png'
+import shapeImg from '../assets/images/shape.png'
+import colorsImg from '../assets/images/colors.png'
+import patternImg from '../assets/images/pattern.png'
+import memoryImg from '../assets/images/memory.png'
 
 const gameState = inject('gameState')
 const sounds = inject('sounds')
@@ -8,14 +13,16 @@ const games = [
   {
     id: 'shapes',
     name: 'Formas',
-    icon: '●▲■',
+    icon: shapeImg,
+    iconType: 'image',
     color: 'bg-purple-500 hover:bg-purple-600',
     description: 'Reconoce las formas'
   },
   {
     id: 'colors',
     name: 'Colores',
-    icon: '🎨',
+    icon: colorsImg,
+    iconType: 'image',
     color: 'bg-pink-500 hover:bg-pink-600',
     description: 'Aprende los colores'
   },
@@ -23,27 +30,31 @@ const games = [
     id: 'counting',
     name: 'Contar',
     icon: '123',
+    iconType: 'text',
     color: 'bg-blue-500 hover:bg-blue-600',
     description: 'Cuenta los objetos'
   },
   {
     id: 'animals',
     name: 'Animales',
-    icon: '🐶',
+    icon: dogImg,
+    iconType: 'image',
     color: 'bg-green-500 hover:bg-green-600',
     description: 'Sonidos de animales'
   },
   {
     id: 'patterns',
     name: 'Patrones',
-    icon: '🔷🔶',
+    icon: patternImg,
+    iconType: 'image',
     color: 'bg-yellow-500 hover:bg-yellow-600',
     description: 'Completa el patrón'
   },
   {
     id: 'memory',
     name: 'Memoria',
-    icon: '🃏',
+    icon: memoryImg,
+    iconType: 'image',
     color: 'bg-red-500 hover:bg-red-600',
     description: 'Encuentra los pares'
   }
@@ -75,11 +86,17 @@ const selectGame = (gameId) => {
         :key="game.id"
         @click="selectGame(game.id)"
         :class="game.color"
-        class="game-button rounded-3xl p-6 md:p-8 text-white shadow-2xl transform transition-all hover:shadow-3xl focus:outline-none focus:ring-4 focus:ring-white/50"
-      >
-        <div class="text-5xl md:text-6xl mb-3 md:mb-4">{{ game.icon }}</div>
-        <h2 class="text-2xl md:text-3xl font-bold mb-2">{{ game.name }}</h2>
-        <p class="text-base md:text-lg opacity-90">{{ game.description }}</p>
+        class="game-button rounded-3xl p-6 md:p-8 text-white shadow-2xl transform transition-all hover:shadow-3xl focus:outline-none focus:ring-4 focus:ring-white/50">
+        <div class="mb-3 md:mb-4 flex items-center justify-center">
+          <img v-if="game.iconType === 'image'" :src="game.icon" :alt="game.name" class="w-16 h-16 md:w-20 md:h-20 object-contain" />
+          <span v-else class="text-5xl md:text-6xl">{{ game.icon }}</span>
+        </div>
+        <h2 class="text-2xl md:text-3xl font-bold mb-2">
+          {{ game.name }}
+        </h2>
+        <p class="text-base md:text-lg opacity-90">
+          {{ game.description }}
+        </p>
       </button>
     </div>
 

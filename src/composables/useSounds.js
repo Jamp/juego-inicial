@@ -1,5 +1,13 @@
 import { ref } from 'vue'
 
+// Importar archivos de audio de animales
+import dogSound from '../assets/sounds/animals/dog.mp3'
+import catSound from '../assets/sounds/animals/cat.mp3'
+import cowSound from '../assets/sounds/animals/cow.mp3'
+import birdSound from '../assets/sounds/animals/bird.mp3'
+import sheepSound from '../assets/sounds/animals/sheep.mp3'
+import pigSound from '../assets/sounds/animals/pig.mp3'
+
 export function useSounds() {
   const audioContext = ref(null)
 
@@ -29,6 +37,13 @@ export function useSounds() {
     oscillator.stop(audioContext.value.currentTime + duration)
   }
 
+  // Función para reproducir archivos de audio
+  const playAudioFile = (src) => {
+    const audio = new Audio(src)
+    audio.volume = 0.7
+    audio.play().catch(err => console.log('Error playing audio:', err))
+  }
+
   // Sonidos para diferentes acciones
   const playSuccess = () => {
     playTone(523.25, 0.1) // C5
@@ -52,32 +67,14 @@ export function useSounds() {
     setTimeout(() => playTone(1046.5, 0.3), 300)
   }
 
-  // Sonidos de animales
+  // Sonidos de animales usando archivos reales
   const animalSounds = {
-    dog: () => {
-      playTone(200, 0.1)
-      setTimeout(() => playTone(180, 0.15), 150)
-    },
-    cat: () => {
-      playTone(800, 0.1)
-      setTimeout(() => playTone(900, 0.15), 120)
-    },
-    cow: () => {
-      playTone(150, 0.3)
-    },
-    bird: () => {
-      playTone(1200, 0.05)
-      setTimeout(() => playTone(1400, 0.05), 80)
-      setTimeout(() => playTone(1600, 0.1), 160)
-    },
-    sheep: () => {
-      playTone(300, 0.2)
-      setTimeout(() => playTone(280, 0.2), 250)
-    },
-    pig: () => {
-      playTone(250, 0.15)
-      setTimeout(() => playTone(220, 0.15), 180)
-    }
+    dog: () => playAudioFile(dogSound),
+    cat: () => playAudioFile(catSound),
+    cow: () => playAudioFile(cowSound),
+    bird: () => playAudioFile(birdSound),
+    sheep: () => playAudioFile(sheepSound),
+    pig: () => playAudioFile(pigSound)
   }
 
   return {

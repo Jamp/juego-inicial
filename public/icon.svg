@@ -1,0 +1,7 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo con color del tema -->
+  <rect width="512" height="512" rx="115" fill="#667eea"/>
+
+  <!-- Imagen de la estrella centrada -->
+  <image href="/star.png" x="64" y="64" width="384" height="384"/>
+</svg>

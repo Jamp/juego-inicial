@@ -1,28 +1,62 @@
 <script setup>
 import { ref, inject, onMounted } from 'vue'
 import GameLayout from '../GameLayout.vue'
+import colorsImg from '../../assets/images/colors.png'
 
 const gameState = inject('gameState')
 const sounds = inject('sounds')
 
+const titleIcon = colorsImg
+
 const colors = [
-  { id: 'red', name: 'Rojo', color: 'bg-red-500', emoji: '🍎' },
-  { id: 'blue', name: 'Azul', color: 'bg-blue-500', emoji: '💙' },
-  { id: 'yellow', name: 'Amarillo', color: 'bg-yellow-400', emoji: '🌟' },
-  { id: 'green', name: 'Verde', color: 'bg-green-500', emoji: '🍀' },
-  { id: 'orange', name: 'Naranja', color: 'bg-orange-500', emoji: '🧡' },
-  { id: 'purple', name: 'Morado', color: 'bg-purple-500', emoji: '💜' }
+  {
+    id: 'red',
+    name: 'Rojo',
+    color: 'bg-red-500'
+  },
+  {
+    id: 'blue',
+    name: 'Azul',
+    color: 'bg-blue-500'
+  },
+  {
+    id: 'yellow',
+    name: 'Amarillo',
+    color: 'bg-yellow-400'
+  },
+  {
+    id: 'green',
+    name: 'Verde',
+    color: 'bg-green-500'
+  },
+  {
+    id: 'orange',
+    name: 'Naranja',
+    color: 'bg-orange-500'
+  },
+  {
+    id: 'purple',
+    name: 'Morado',
+    color: 'bg-purple-500'
+  }
 ]
 
 const currentColor = ref(null)
+const previousColor = ref(null)
 const options = ref([])
 const showFeedback = ref(false)
 
 const generateRound = () => {
   showFeedback.value = false
 
-  // Elegir un color aleatorio
-  currentColor.value = colors[Math.floor(Math.random() * colors.length)]
+  // Elegir un color aleatorio diferente al anterior
+  let newColor
+  do {
+    newColor = colors[Math.floor(Math.random() * colors.length)]
+  } while (previousColor.value && newColor.id === previousColor.value.id)
+
+  previousColor.value = currentColor.value
+  currentColor.value = newColor
 
   // Crear 4 opciones aleatorias incluyendo la correcta
   const wrongColors = colors.filter(c => c.id !== currentColor.value.id)
@@ -50,7 +84,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <GameLayout title="🎨 ¿Qué Color Es?" bg-color="bg-gradient-to-br from-blue-100 to-purple-100">
+  <GameLayout title="¿Qué Color Es?" :title-icon="titleIcon" bg-color="bg-gradient-to-br from-blue-100 to-purple-100">
     <div class="flex flex-col items-center justify-center gap-8 md:gap-12">
       <!-- Instrucción -->
       <div class="text-center">
@@ -59,13 +93,12 @@ onMounted(() => {
         </p>
 
         <!-- Color objetivo -->
-        <div class="inline-block bg-white rounded-3xl p-8 md:p-12 shadow-xl">
+        <div class="inline-block bg-white rounded-3xl p-4 md:p-12 shadow-xl">
           <div class="flex flex-col items-center gap-4">
             <div :class="currentColor?.color" class="w-32 h-32 md:w-40 md:h-40 rounded-full shadow-2xl flex items-center justify-center border-8 border-white">
-              <span class="text-6xl md:text-7xl">{{ currentColor?.emoji }}</span>
             </div>
             <p class="text-2xl md:text-3xl font-bold text-gray-700">
-              {{ currentColor?.name }}
+              <!-- {{ currentColor?.name }} -->
             </p>
           </div>
         </div>
@@ -83,7 +116,6 @@ onMounted(() => {
           class="game-button bg-white rounded-2xl md:rounded-3xl shadow-xl hover:shadow-2xl flex flex-col items-center justify-center gap-3 p-6 md:p-8"
         >
           <div :class="color.color" class="w-24 h-24 md:w-28 md:h-28 rounded-full shadow-lg border-4 border-gray-200 flex items-center justify-center">
-            <span class="text-4xl md:text-5xl">{{ color.emoji }}</span>
           </div>
           <span class="text-lg md:text-xl font-bold text-gray-700">
             {{ color.name }}

@@ -2,19 +2,67 @@
 import { ref, inject, onMounted } from 'vue'
 import GameLayout from '../GameLayout.vue'
 
+// Importar imágenes de animales
+import dogImg from '../../assets/images/dog.png'
+import catImg from '../../assets/images/cat.png'
+import cowImg from '../../assets/images/cow.png'
+import chickenImg from '../../assets/images/chicken.png'
+import sheepImg from '../../assets/images/sheep.png'
+import porkImg from '../../assets/images/pork.png'
+
+// Icono del título (usar la misma imagen del menú)
+const titleIcon = dogImg
+
 const gameState = inject('gameState')
 const sounds = inject('sounds')
 
 const animals = [
-  { id: 'dog', emoji: '🐶', name: 'Perro', sound: 'dog', text: 'Guau guau!' },
-  { id: 'cat', emoji: '🐱', name: 'Gato', sound: 'cat', text: 'Miau!' },
-  { id: 'cow', emoji: '🐮', name: 'Vaca', sound: 'cow', text: 'Muuu!' },
-  { id: 'bird', emoji: '🐦', name: 'Pájaro', sound: 'bird', text: 'Pio pio!' },
-  { id: 'sheep', emoji: '🐑', name: 'Oveja', sound: 'sheep', text: 'Beee!' },
-  { id: 'pig', emoji: '🐷', name: 'Cerdo', sound: 'pig', text: 'Oink oink!' }
+  {
+    id: 'dog',
+    image: dogImg,
+    name: 'Perro',
+    sound: 'dog',
+    text: 'Guau guau!'
+  },
+  {
+    id: 'cat',
+    image: catImg,
+    name: 'Gato',
+    sound: 'cat',
+    text: 'Miau!'
+  },
+  {
+    id: 'cow',
+    image: cowImg,
+    name: 'Vaca',
+    sound: 'cow',
+    text: 'Muuu!'
+  },
+  {
+    id: 'bird',
+    image: chickenImg,
+    name: 'Pollito',
+    sound: 'bird',
+    text: 'Pio pio!'
+  },
+  {
+    id: 'sheep',
+    image: sheepImg,
+    name: 'Oveja',
+    sound: 'sheep',
+    text: 'Beee!'
+  },
+  {
+    id: 'pig',
+    image: porkImg,
+    name: 'Cerdito',
+    sound: 'pig',
+    text: 'Oink oink!'
+  }
 ]
 
 const currentAnimal = ref(null)
+const previousAnimal = ref(null)
 const options = ref([])
 const showFeedback = ref(false)
 const showSoundText = ref(false)
@@ -23,8 +71,14 @@ const generateRound = () => {
   showFeedback.value = false
   showSoundText.value = false
 
-  // Elegir animal aleatorio
-  currentAnimal.value = animals[Math.floor(Math.random() * animals.length)]
+  // Elegir animal aleatorio diferente al anterior
+  let newAnimal
+  do {
+    newAnimal = animals[Math.floor(Math.random() * animals.length)]
+  } while (previousAnimal.value && newAnimal.id === previousAnimal.value.id)
+
+  previousAnimal.value = currentAnimal.value
+  currentAnimal.value = newAnimal
 
   // Crear 4 opciones aleatorias incluyendo la correcta
   const wrongAnimals = animals.filter(a => a.id !== currentAnimal.value.id)
@@ -66,7 +120,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <GameLayout title="🐾 Sonidos de Animales" bg-color="bg-gradient-to-br from-yellow-100 to-green-100">
+  <GameLayout title="Sonidos de Animales" :title-icon="titleIcon" bg-color="bg-gradient-to-br from-yellow-100 to-green-100">
     <div class="flex flex-col items-center justify-center gap-6 md:gap-8">
       <!-- Instrucción -->
       <div class="text-center">
@@ -101,7 +155,7 @@ onMounted(() => {
           ]"
           class="game-button bg-white rounded-2xl md:rounded-3xl shadow-xl hover:shadow-2xl flex flex-col items-center justify-center gap-3 p-6 md:p-8"
         >
-          <span class="text-6xl md:text-7xl">{{ animal.emoji }}</span>
+          <img :src="animal.image" :alt="animal.name" class="w-20 h-20 md:w-24 md:h-24 object-contain" />
           <span class="text-lg md:text-xl font-bold text-gray-700">
             {{ animal.name }}
           </span>
