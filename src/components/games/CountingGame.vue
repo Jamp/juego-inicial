@@ -151,20 +151,20 @@ onMounted(() => {
 
 <template>
   <GameLayout title="¡A Contar!" bg-color="bg-gradient-to-br from-green-100 to-blue-100">
-    <div class="flex flex-col items-center justify-center gap-6 md:gap-8">
+    <div class="flex flex-col items-center justify-start gap-4 md:gap-8 h-full">
       <!-- Instrucción -->
-      <div class="text-center flex items-center justify-center gap-3">
-        <p class="text-2xl md:text-3xl font-bold text-gray-700">
+      <div class="text-center flex items-center justify-center gap-2 md:gap-3">
+        <p class="text-xl md:text-3xl font-bold text-gray-700">
           ¿Cuántos
         </p>
-        <img v-if="currentObject" :src="currentObject.image" :alt="currentObject.name" class="w-12 h-12 md:w-16 md:h-16 object-contain inline-block" />
-        <p class="text-2xl md:text-3xl font-bold text-gray-700">
+        <img v-if="currentObject" :src="currentObject.image" :alt="currentObject.name" class="w-8 h-8 md:w-16 md:h-16 object-contain inline-block" />
+        <p class="text-xl md:text-3xl font-bold text-gray-700">
           hay?
         </p>
       </div>
 
       <!-- Área de objetos -->
-      <div class="relative w-full max-w-2xl h-64 md:h-80 bg-white rounded-3xl shadow-xl overflow-hidden">
+      <div class="relative w-full max-w-2xl h-48 md:h-80 bg-white rounded-2xl md:rounded-3xl shadow-xl overflow-hidden">
         <div
           v-for="item in displayItems"
           :key="item.id"
@@ -175,20 +175,20 @@ onMounted(() => {
           }"
           class="absolute pop-in"
         >
-          <img v-if="currentObject" :src="currentObject.image" :alt="currentObject.name" class="w-12 h-12 md:w-16 md:h-16 object-contain" />
+          <img v-if="currentObject" :src="currentObject.image" :alt="currentObject.name" class="w-10 h-10 md:w-16 md:h-16 object-contain" />
         </div>
       </div>
 
       <!-- Opciones de números -->
-      <div class="flex flex-wrap justify-center gap-3 md:gap-4 max-w-xl">
+      <div class="flex flex-wrap justify-center gap-2 md:gap-4 max-w-xl px-2">
         <button
           v-for="number in options"
           :key="number"
           @click="selectNumber(number)"
           :class="[
-            showFeedback && number === targetCount ? 'ring-8 ring-green-400 celebrate' : ''
+            showFeedback && number === targetCount ? 'ring-4 md:ring-8 ring-green-400 celebrate' : ''
           ]"
-          class="game-button w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-blue-400 to-purple-500 text-white rounded-2xl shadow-xl hover:shadow-2xl flex items-center justify-center text-4xl md:text-5xl font-bold"
+          class="game-button w-16 h-16 md:w-24 md:h-24 bg-gradient-to-br from-blue-400 to-purple-500 text-white rounded-xl md:rounded-2xl shadow-xl hover:shadow-2xl flex items-center justify-center text-3xl md:text-5xl font-bold"
         >
           {{ number }}
         </button>
@@ -196,10 +196,10 @@ onMounted(() => {
 
       <!-- Mensaje de celebración -->
       <Transition name="bounce">
-        <div v-if="showFeedback" class="text-4xl md:text-5xl font-bold text-green-600 flex items-center gap-3">
-          <span class="text-5xl md:text-6xl">🎯</span>
+        <div v-if="showFeedback" class="text-2xl md:text-5xl font-bold text-green-600 flex items-center gap-2 md:gap-3 mt-2">
+          <span class="text-3xl md:text-6xl">🎯</span>
           ¡Excelente!
-          <span class="text-5xl md:text-6xl">🎯</span>
+          <span class="text-3xl md:text-6xl">🎯</span>
         </div>
       </Transition>
     </div>

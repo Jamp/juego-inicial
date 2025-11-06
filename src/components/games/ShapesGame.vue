@@ -82,42 +82,42 @@ onMounted(() => {
 
 <template>
   <GameLayout title="Encuentra la Forma" :title-icon="titleIcon" bg-color="bg-gradient-to-br from-purple-100 to-pink-100">
-    <div class="flex flex-col items-center justify-center gap-8 md:gap-12">
+    <div class="flex flex-col items-center justify-start gap-4 md:gap-8 h-full">
       <!-- Instrucción -->
       <div class="text-center">
-        <p class="text-2xl md:text-3xl font-bold text-gray-700 mb-4">
+        <p class="text-xl md:text-3xl font-bold text-gray-700 mb-2 md:mb-4">
           Encuentra esta forma:
         </p>
 
         <!-- Forma objetivo -->
-        <div class="inline-block bg-white rounded-3xl p-8 md:p-12 shadow-xl">
-          <div :class="currentShape?.color" class="w-32 h-32 md:w-40 md:h-40 rounded-2xl flex items-center justify-center shape-target">
-            <span class="text-8xl md:text-9xl text-white drop-shadow-lg leading-none">
+        <div class="inline-block bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 shadow-xl">
+          <div :class="currentShape?.color" class="w-20 h-20 md:w-32 md:h-32 rounded-2xl flex items-center justify-center shape-target">
+            <span class="text-6xl md:text-8xl text-white drop-shadow-lg leading-none">
               {{ currentShape?.icon }}
             </span>
           </div>
-          <p class="text-xl md:text-2xl font-bold mt-4 text-gray-700">
+          <p class="text-base md:text-2xl font-bold mt-2 md:mt-4 text-gray-700">
             {{ currentShape?.name }}
           </p>
         </div>
       </div>
 
       <!-- Opciones -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full max-w-4xl">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 w-full max-w-4xl px-2">
         <button
           v-for="shape in options"
           :key="shape.id"
           @click="selectShape(shape)"
           :class="[
             shape.color,
-            showFeedback && shape.id === currentShape.id ? 'ring-8 ring-green-400 celebrate' : ''
+            showFeedback && shape.id === currentShape.id ? 'ring-4 md:ring-8 ring-green-400 celebrate' : ''
           ]"
-          class="game-button aspect-square rounded-2xl md:rounded-3xl shadow-xl hover:shadow-2xl flex flex-col items-center justify-center gap-3 p-4 md:p-6"
+          class="game-button aspect-square rounded-xl md:rounded-3xl shadow-xl hover:shadow-2xl flex flex-col items-center justify-center gap-2 md:gap-3 p-3 md:p-6"
         >
-          <span class="text-6xl md:text-7xl text-white drop-shadow-lg">
+          <span class="text-4xl md:text-6xl text-white drop-shadow-lg">
             {{ shape.icon }}
           </span>
-          <span class="text-lg md:text-xl font-bold text-white drop-shadow">
+          <span class="text-sm md:text-xl font-bold text-white drop-shadow">
             {{ shape.name }}
           </span>
         </button>
@@ -125,10 +125,10 @@ onMounted(() => {
 
       <!-- Mensaje de celebración -->
       <Transition name="bounce">
-        <div v-if="showFeedback" class="text-4xl md:text-5xl font-bold text-green-600 flex items-center gap-3">
-          <span class="text-5xl md:text-6xl">🎉</span>
+        <div v-if="showFeedback" class="text-2xl md:text-5xl font-bold text-green-600 flex items-center gap-2 md:gap-3 mt-2">
+          <span class="text-3xl md:text-6xl">🎉</span>
           ¡Muy bien!
-          <span class="text-5xl md:text-6xl">🎉</span>
+          <span class="text-3xl md:text-6xl">🎉</span>
         </div>
       </Transition>
     </div>

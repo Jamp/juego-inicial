@@ -85,39 +85,35 @@ onMounted(() => {
 
 <template>
   <GameLayout title="¿Qué Color Es?" :title-icon="titleIcon" bg-color="bg-gradient-to-br from-blue-100 to-purple-100">
-    <div class="flex flex-col items-center justify-center gap-8 md:gap-12">
+    <div class="flex flex-col items-center justify-start gap-4 md:gap-8 h-full">
       <!-- Instrucción -->
       <div class="text-center">
-        <p class="text-2xl md:text-3xl font-bold text-gray-700 mb-4">
+        <p class="text-xl md:text-3xl font-bold text-gray-700 mb-2 md:mb-4">
           Encuentra el color:
         </p>
 
         <!-- Color objetivo -->
-        <div class="inline-block bg-white rounded-3xl p-4 md:p-12 shadow-xl">
-          <div class="flex flex-col items-center gap-4">
-            <div :class="currentColor?.color" class="w-32 h-32 md:w-40 md:h-40 rounded-full shadow-2xl flex items-center justify-center border-8 border-white">
+        <div class="inline-block bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 shadow-xl">
+          <div class="flex flex-col items-center gap-2">
+            <div :class="currentColor?.color" class="w-20 h-20 md:w-32 md:h-32 rounded-full shadow-2xl flex items-center justify-center border-4 md:border-8 border-white">
             </div>
-            <p class="text-2xl md:text-3xl font-bold text-gray-700">
-              <!-- {{ currentColor?.name }} -->
-            </p>
           </div>
         </div>
       </div>
 
       <!-- Opciones -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full max-w-4xl">
+      <div class="grid grid-cols-2 gap-3 md:gap-6 w-full max-w-4xl px-2">
         <button
           v-for="color in options"
           :key="color.id"
           @click="selectColor(color)"
           :class="[
-            showFeedback && color.id === currentColor.id ? 'ring-8 ring-green-400 celebrate' : ''
+            showFeedback && color.id === currentColor.id ? 'ring-4 md:ring-8 ring-green-400 celebrate' : ''
           ]"
-          class="game-button bg-white rounded-2xl md:rounded-3xl shadow-xl hover:shadow-2xl flex flex-col items-center justify-center gap-3 p-6 md:p-8"
-        >
-          <div :class="color.color" class="w-24 h-24 md:w-28 md:h-28 rounded-full shadow-lg border-4 border-gray-200 flex items-center justify-center">
+          class="game-button bg-white rounded-xl md:rounded-3xl shadow-xl hover:shadow-2xl flex flex-col items-center justify-center gap-2 md:gap-3 p-3 md:p-8">
+          <div :class="color.color" class="w-16 h-16 md:w-24 md:h-24 rounded-full shadow-lg border-2 md:border-4 border-gray-200 flex items-center justify-center">
           </div>
-          <span class="text-lg md:text-xl font-bold text-gray-700">
+          <span class="text-base md:text-xl font-bold text-gray-700">
             {{ color.name }}
           </span>
         </button>
@@ -125,10 +121,10 @@ onMounted(() => {
 
       <!-- Mensaje de celebración -->
       <Transition name="bounce">
-        <div v-if="showFeedback" class="text-4xl md:text-5xl font-bold text-green-600 flex items-center gap-3">
-          <span class="text-5xl md:text-6xl">✨</span>
+        <div v-if="showFeedback" class="text-2xl md:text-5xl font-bold text-green-600 flex items-center gap-2 md:gap-3 mt-2">
+          <span class="text-3xl md:text-6xl">✨</span>
           ¡Perfecto!
-          <span class="text-5xl md:text-6xl">✨</span>
+          <span class="text-3xl md:text-6xl">✨</span>
         </div>
       </Transition>
     </div>

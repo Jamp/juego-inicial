@@ -29,30 +29,30 @@ const goBack = () => {
 <template>
   <div class="w-full max-w-6xl mx-auto">
     <!-- Header con título y botón de volver -->
-    <div class="flex items-center justify-between mb-6 px-4">
+    <div class="flex items-center justify-between mb-3 md:mb-6 px-2 md:px-4">
       <button
         @click="goBack"
-        class="game-button bg-white/90 hover:bg-white text-gray-800 px-6 py-3 rounded-full font-bold text-lg shadow-lg flex items-center gap-2">
-        <span class="text-2xl">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-icon lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        class="game-button bg-white/90 hover:bg-white text-gray-800 px-3 py-2 md:px-6 md:py-3 rounded-full font-bold text-base md:text-lg shadow-lg flex items-center gap-1 md:gap-2">
+        <span class="text-xl md:text-2xl">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-icon lucide-arrow-left md:w-6 md:h-6"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
         </span>
         <span class="hidden sm:inline">Menú</span>
       </button>
 
-      <h1 class="text-3xl md:text-5xl font-bold text-white drop-shadow-lg text-center flex-1 flex items-center justify-center gap-3">
-        <img v-if="titleIcon" :src="titleIcon" :alt="title" class="w-10 h-10 md:w-14 md:h-14 object-contain inline-block" />
+      <h1 class="text-xl md:text-5xl font-bold text-white drop-shadow-lg text-center flex-1 flex items-center justify-center gap-2 md:gap-3">
+        <img v-if="titleIcon" :src="titleIcon" :alt="title" class="w-6 h-6 md:w-14 md:h-14 object-contain inline-block" />
         <span>{{ title }}</span>
       </h1>
 
       <!-- Contador de puntos (decorativo) -->
-      <div class="bg-white/90 px-4 md:px-6 py-3 rounded-full font-bold text-lg md:text-xl shadow-lg flex items-center gap-2">
-        <img :src="starPointImg" alt="Star" class="w-6 h-6 md:w-7 md:h-7 object-contain" />
+      <div class="bg-white/90 px-3 py-2 md:px-6 md:py-3 rounded-full font-bold text-base md:text-xl shadow-lg flex items-center gap-1 md:gap-2">
+        <img :src="starPointImg" alt="Star" class="w-5 h-5 md:w-7 md:h-7 object-contain" />
         <span>{{ gameState.score.value }}</span>
       </div>
     </div>
 
     <!-- Área del juego -->
-    <div :class="bgColor" class="rounded-3xl shadow-2xl p-4 md:p-8 min-h-[60vh]">
+    <div :class="bgColor" class="rounded-2xl md:rounded-3xl shadow-2xl p-3 md:p-8 min-h-[70vh] md:min-h-[60vh] overflow-y-auto">
       <slot></slot>
     </div>
 

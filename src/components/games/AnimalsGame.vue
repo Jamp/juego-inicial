@@ -121,58 +121,58 @@ onMounted(() => {
 
 <template>
   <GameLayout title="Sonidos de Animales" :title-icon="titleIcon" bg-color="bg-gradient-to-br from-yellow-100 to-green-100">
-    <div class="flex flex-col items-center justify-center gap-6 md:gap-8">
+    <div class="flex flex-col items-center justify-start gap-4 md:gap-8 h-full">
       <!-- Instrucción -->
       <div class="text-center">
-        <p class="text-2xl md:text-3xl font-bold text-gray-700 mb-4">
+        <p class="text-xl md:text-3xl font-bold text-gray-700 mb-2 md:mb-4">
           ¿Qué animal hace este sonido?
         </p>
 
         <!-- Botón de reproducir sonido -->
         <button
           @click="playAnimalSound"
-          class="game-button bg-gradient-to-br from-orange-400 to-pink-500 text-white px-8 md:px-12 py-6 md:py-8 rounded-3xl shadow-2xl text-6xl md:text-7xl hover:scale-110"
+          class="game-button bg-gradient-to-br from-orange-400 to-pink-500 text-white px-6 md:px-12 py-4 md:py-8 rounded-2xl md:rounded-3xl shadow-2xl text-4xl md:text-7xl hover:scale-110"
         >
           🔊
         </button>
 
         <!-- Texto del sonido -->
         <Transition name="sound-text">
-          <div v-if="showSoundText" class="mt-4 text-3xl md:text-4xl font-bold text-gray-700">
+          <div v-if="showSoundText" class="mt-2 md:mt-4 text-2xl md:text-4xl font-bold text-gray-700">
             {{ currentAnimal?.text }}
           </div>
         </Transition>
       </div>
 
       <!-- Opciones de animales -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full max-w-4xl">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 w-full max-w-4xl px-2">
         <button
           v-for="animal in options"
           :key="animal.id"
           @click="selectAnimal(animal)"
           :class="[
-            showFeedback && animal.id === currentAnimal.id ? 'ring-8 ring-green-400 celebrate' : ''
+            showFeedback && animal.id === currentAnimal.id ? 'ring-4 md:ring-8 ring-green-400 celebrate' : ''
           ]"
-          class="game-button bg-white rounded-2xl md:rounded-3xl shadow-xl hover:shadow-2xl flex flex-col items-center justify-center gap-3 p-6 md:p-8"
+          class="game-button bg-white rounded-xl md:rounded-3xl shadow-xl hover:shadow-2xl flex flex-col items-center justify-center gap-2 md:gap-3 p-3 md:p-8"
         >
-          <img :src="animal.image" :alt="animal.name" class="w-20 h-20 md:w-24 md:h-24 object-contain" />
-          <span class="text-lg md:text-xl font-bold text-gray-700">
+          <img :src="animal.image" :alt="animal.name" class="w-16 h-16 md:w-24 md:h-24 object-contain" />
+          <span class="text-sm md:text-xl font-bold text-gray-700">
             {{ animal.name }}
           </span>
         </button>
       </div>
 
       <!-- Mensaje de ayuda -->
-      <div class="text-center text-gray-600 text-base md:text-lg">
+      <div class="text-center text-gray-600 text-sm md:text-lg">
         <p>👆 Toca el altavoz para escuchar el sonido</p>
       </div>
 
       <!-- Mensaje de celebración -->
       <Transition name="bounce">
-        <div v-if="showFeedback" class="text-4xl md:text-5xl font-bold text-green-600 flex items-center gap-3">
-          <span class="text-5xl md:text-6xl">🎊</span>
+        <div v-if="showFeedback" class="text-2xl md:text-5xl font-bold text-green-600 flex items-center gap-2 md:gap-3 mt-2">
+          <span class="text-3xl md:text-6xl">🎊</span>
           ¡Correcto!
-          <span class="text-5xl md:text-6xl">🎊</span>
+          <span class="text-3xl md:text-6xl">🎊</span>
         </div>
       </Transition>
     </div>

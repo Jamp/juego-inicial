@@ -105,50 +105,50 @@ onMounted(() => {
 
 <template>
   <GameLayout title="Completa el Patrón" :title-icon="titleIcon" bg-color="bg-gradient-to-br from-pink-100 to-yellow-100">
-    <div class="flex flex-col items-center justify-center gap-6 md:gap-8">
+    <div class="flex flex-col items-center justify-start gap-4 md:gap-8 h-full">
       <!-- Instrucción -->
       <div class="text-center">
-        <p class="text-2xl md:text-3xl font-bold text-gray-700 mb-4">
+        <p class="text-xl md:text-3xl font-bold text-gray-700 mb-2 md:mb-4">
           ¿Qué sigue en el patrón?
         </p>
       </div>
 
       <!-- Patrón -->
-      <div class="bg-white rounded-3xl p-6 md:p-8 shadow-xl">
+      <div class="bg-white rounded-2xl md:rounded-3xl p-3 md:p-8 shadow-xl">
         <div class="flex flex-wrap justify-center gap-2 md:gap-3 max-w-3xl">
           <div
             v-for="(item, index) in pattern"
             :key="index"
             :class="[
               item.color,
-              index === missingIndex ? 'bg-gray-200 border-4 border-dashed border-gray-400' : ''
+              index === missingIndex ? 'bg-gray-200 border-2 md:border-4 border-dashed border-gray-400' : ''
             ]"
-            class="w-16 h-16 md:w-20 md:h-20 rounded-2xl shadow-lg flex items-center justify-center text-3xl md:text-4xl transition-all duration-300"
+            class="w-12 h-12 md:w-20 md:h-20 rounded-xl md:rounded-2xl shadow-lg flex items-center justify-center text-2xl md:text-4xl transition-all duration-300"
             :style="{ animationDelay: index * 0.05 + 's' }"
           >
             <span v-if="index !== missingIndex">{{ item.emoji }}</span>
-            <span v-else class="text-4xl md:text-5xl text-gray-400">?</span>
+            <span v-else class="text-3xl md:text-5xl text-gray-400">?</span>
           </div>
         </div>
       </div>
 
       <!-- Opciones -->
-      <div class="text-center mb-2">
-        <p class="text-xl md:text-2xl font-bold text-gray-600">
+      <div class="text-center">
+        <p class="text-base md:text-2xl font-bold text-gray-600">
           Elige la respuesta correcta:
         </p>
       </div>
 
-      <div class="flex flex-wrap justify-center gap-3 md:gap-4">
+      <div class="flex flex-wrap justify-center gap-2 md:gap-4 px-2">
         <button
           v-for="item in options"
           :key="item.id"
           @click="selectItem(item)"
           :class="[
             item.color,
-            showFeedback && item.id === correctAnswer.id ? 'ring-8 ring-green-400 celebrate' : ''
+            showFeedback && item.id === correctAnswer.id ? 'ring-4 md:ring-8 ring-green-400 celebrate' : ''
           ]"
-          class="game-button w-20 h-20 md:w-24 md:h-24 rounded-2xl shadow-xl hover:shadow-2xl flex items-center justify-center text-4xl md:text-5xl"
+          class="game-button w-16 h-16 md:w-24 md:h-24 rounded-xl md:rounded-2xl shadow-xl hover:shadow-2xl flex items-center justify-center text-3xl md:text-5xl"
         >
           {{ item.emoji }}
         </button>
@@ -156,10 +156,10 @@ onMounted(() => {
 
       <!-- Mensaje de celebración -->
       <Transition name="bounce">
-        <div v-if="showFeedback" class="text-4xl md:text-5xl font-bold text-green-600 flex items-center gap-3">
-          <span class="text-5xl md:text-6xl">🌟</span>
+        <div v-if="showFeedback" class="text-2xl md:text-5xl font-bold text-green-600 flex items-center gap-2 md:gap-3 mt-2">
+          <span class="text-3xl md:text-6xl">🌟</span>
           ¡Genial!
-          <span class="text-5xl md:text-6xl">🌟</span>
+          <span class="text-3xl md:text-6xl">🌟</span>
         </div>
       </Transition>
     </div>

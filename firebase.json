@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "juegoinicialpapa",
     "public": "dist",
     "ignore": [
       "firebase.json",

@@ -112,16 +112,16 @@ onMounted(() => {
 
 <template>
   <GameLayout title="Memoria" :title-icon="titleIcon" bg-color="bg-gradient-to-br from-indigo-100 to-purple-100">
-    <div class="flex flex-col items-center justify-center gap-6 md:gap-8">
+    <div class="flex flex-col items-center justify-start gap-4 md:gap-8 h-full">
       <!-- Instrucción -->
       <div class="text-center">
-        <p class="text-2xl md:text-3xl font-bold text-gray-700">
+        <p class="text-xl md:text-3xl font-bold text-gray-700">
           Encuentra los pares iguales
         </p>
       </div>
 
       <!-- Tablero de cartas -->
-      <div class="grid grid-cols-4 gap-3 md:gap-4 max-w-2xl">
+      <div class="grid grid-cols-4 gap-2 md:gap-4 max-w-2xl px-2">
         <button
           v-for="card in cards"
           :key="card.id"
@@ -129,40 +129,40 @@ onMounted(() => {
           :class="[
             card.isMatched ? 'opacity-50' : ''
           ]"
-          class="game-button aspect-square rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 w-20 h-20 md:w-28 md:h-28">
+          class="game-button aspect-square rounded-xl md:rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 w-16 h-16 md:w-28 md:h-28">
           <div class="card-inner w-full h-full relative" :class="{ 'is-flipped': card.isFlipped || card.isMatched }">
             <!-- Parte frontal (oculta) -->
-            <div class="card-front absolute inset-0 flex items-center justify-center bg-white rounded-2xl p-2">
+            <div class="card-front absolute inset-0 flex items-center justify-center bg-white rounded-xl md:rounded-2xl p-1 md:p-2">
               <img :src="card.image" alt="Animal" class="w-full h-full object-contain" />
             </div>
             <!-- Parte trasera (visible por defecto) -->
-            <div class="card-back-side absolute inset-0 flex items-center justify-center bg-white rounded-2xl shadow-inner">
-              <img :src="questionImg" alt="?" class="w-16 h-16 md:w-20 md:h-20 object-contain" />
+            <div class="card-back-side absolute inset-0 flex items-center justify-center bg-white rounded-xl md:rounded-2xl shadow-inner">
+              <img :src="questionImg" alt="?" class="w-12 h-12 md:w-20 md:h-20 object-contain" />
             </div>
           </div>
         </button>
       </div>
 
       <!-- Progreso -->
-      <div class="flex gap-3">
+      <div class="flex gap-2 md:gap-3">
         <div
           v-for="(pair, index) in 4"
           :key="index"
           :class="[
             matchedPairs.length > index ? 'bg-green-400 scale-110' : 'bg-gray-300'
           ]"
-          class="w-12 h-12 md:w-14 md:h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-300"
+          class="w-10 h-10 md:w-14 md:h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-300"
         >
-          <span v-if="matchedPairs.length > index" class="text-2xl md:text-3xl">✓</span>
+          <span v-if="matchedPairs.length > index" class="text-xl md:text-3xl">✓</span>
         </div>
       </div>
 
       <!-- Mensaje de celebración -->
       <Transition name="bounce">
-        <div v-if="matchedPairs.length === 4" class="text-4xl md:text-5xl font-bold text-green-600 flex items-center gap-3">
-          <span class="text-5xl md:text-6xl">🎊</span>
+        <div v-if="matchedPairs.length === 4" class="text-2xl md:text-5xl font-bold text-green-600 flex items-center gap-2 md:gap-3 mt-2">
+          <span class="text-3xl md:text-6xl">🎊</span>
           ¡Completado!
-          <span class="text-5xl md:text-6xl">🎊</span>
+          <span class="text-3xl md:text-6xl">🎊</span>
         </div>
       </Transition>
     </div>
