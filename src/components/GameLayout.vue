@@ -52,12 +52,12 @@ const goBack = () => {
     <!-- Mensajes de celebración -->
     <Transition name="celebrate">
       <div
-        v-if="gameState.celebrations.value > 0"
-        :key="gameState.celebrations.value"
+        v-if="gameState.celebrating.value"
+        :key="gameState.celebrationKey.value"
         class="fixed inset-0 pointer-events-none flex items-center justify-center"
       >
         <div class="text-8xl md:text-9xl celebrate">
-          {{ ['🎉', '🌟', '⭐', '✨', '🎊'][gameState.celebrations.value % 5] }}
+          {{ ['🎉', '🌟', '⭐', '✨', '🎊'][gameState.celebrationKey.value % 5] }}
         </div>
       </div>
     </Transition>
