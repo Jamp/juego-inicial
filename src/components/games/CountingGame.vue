@@ -189,9 +189,8 @@ onMounted(() => {
           :key="number"
           @click="selectNumber(number)"
           :class="[
-            showFeedback && number === targetCount ? 'ring-4 md:ring-8 ring-green-500 celebrate correct-answer-glow z-10 relative' : ''
+            showFeedback && number === targetCount ? 'ring-4 md:ring-8 ring-green-500 celebrate z-10 relative' : ''
           ]"
-          style="z-index: var(--z-base)"
           class="game-button w-16 h-16 md:w-24 md:h-24 bg-gradient-to-br from-blue-400 to-purple-500 text-white rounded-xl md:rounded-2xl shadow-xl hover:shadow-2xl flex items-center justify-center text-3xl md:text-5xl font-bold"
         >
           {{ number }}

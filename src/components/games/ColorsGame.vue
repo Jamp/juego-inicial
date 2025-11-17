@@ -111,9 +111,8 @@ onMounted(() => {
           :key="color.id"
           @click="selectColor(color)"
           :class="[
-            showFeedback && color.id === currentColor.id ? 'ring-4 md:ring-8 ring-green-500 celebrate correct-answer-glow z-10 relative' : ''
+            showFeedback && color.id === currentColor.id ? 'ring-4 md:ring-8 ring-green-500 celebrate z-10 relative' : ''
           ]"
-          style="z-index: var(--z-base)"
           class="game-button bg-white rounded-xl md:rounded-3xl shadow-xl hover:shadow-2xl flex flex-col items-center justify-center gap-2 md:gap-3 p-3 md:p-8">
           <div :class="color.color" class="w-16 h-16 md:w-24 md:h-24 rounded-full shadow-lg border-2 md:border-4 border-gray-200 flex items-center justify-center">
           </div>
