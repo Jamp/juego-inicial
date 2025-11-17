@@ -13,29 +13,13 @@
 body {
   margin: 0;
   padding: 0;
-  /* Fallback para navegadores antiguos */
   min-height: 100vh;
-  /* Dynamic viewport height - se ajusta con la barra de navegación */
-  min-height: 100dvh;
   background: linear-gradient(to bottom right, rgb(192 132 252), rgb(249 168 212), rgb(147 197 253));
   font-family: 'Baloo 2', 'Comic Sans MS', cursive, sans-serif;
-  /* Prevenir scroll en dispositivos móviles */
-  overflow: hidden;
-  position: fixed;
-  width: 100%;
-  /* Soporte para notch en iOS */
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 #app {
-  /* Fallback para navegadores antiguos */
-  height: 100vh;
-  /* Dynamic viewport height */
-  height: 100dvh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  /* Scroll suave en iOS */
-  -webkit-overflow-scrolling: touch;
+  min-height: 100vh;
 }
 
 /* Clase para mensajes de celebración que no usan Baloo 2 */
