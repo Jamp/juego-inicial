@@ -147,8 +147,9 @@ onMounted(() => {
           :key="shape.id"
           @click="selectShape(shape)"
           :class="[
-            showFeedback && shape.id === currentShape.id ? 'ring-4 md:ring-8 ring-green-400 scale-105 celebrate z-10 relative' : ''
+            showFeedback && shape.id === currentShape.id ? 'ring-4 md:ring-8 ring-green-500 scale-105 celebrate correct-answer-glow z-10 relative' : ''
           ]"
+          style="z-index: var(--z-base)"
           class="game-button bg-white aspect-square rounded-xl md:rounded-3xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-2 md:gap-4 p-4 md:p-6">
           <div class="w-16 h-16 md:w-24 md:h-24 flex items-center justify-center">
             <ShapeIcon
