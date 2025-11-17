@@ -88,6 +88,11 @@ const generateRound = () => {
     .slice(0, 3)
 
   options.value = [newShape, ...wrongOptions].sort(() => Math.random() - 0.5)
+
+  // Reproducir audio de la forma después de un pequeño delay (para dar tiempo a la animación)
+  setTimeout(() => {
+    sounds.playShapeSound(newShape.id)
+  }, 400)
 }
 
 const selectShape = (shape) => {
@@ -98,6 +103,11 @@ const selectShape = (shape) => {
     showFeedback.value = true
     sounds.playCorrect()
     gameState.celebrate()
+
+    // Reproducir audio de refuerzo positivo (repetir el nombre de la forma)
+    setTimeout(() => {
+      sounds.playShapeSound(shape.id)
+    }, 300)
 
     // Siguiente ronda después de un momento
     setTimeout(() => {

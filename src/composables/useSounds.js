@@ -8,6 +8,16 @@ import birdSound from '../assets/sounds/animals/bird.mp3'
 import sheepSound from '../assets/sounds/animals/sheep.mp3'
 import pigSound from '../assets/sounds/animals/pig.mp3'
 
+// Importar archivos de audio de formas geométricas
+import circleSound from '../assets/sounds/voices/circulo.mp3'
+import squareSound from '../assets/sounds/voices/cuadrado.mp3'
+import rectangleSound from '../assets/sounds/voices/rectangulo.mp3'
+import pentagonSound from '../assets/sounds/voices/pentagono.mp3'
+import hexagonSound from '../assets/sounds/voices/hexagono.mp3'
+import diamondSound from '../assets/sounds/voices/diamante.mp3'
+import heartSound from '../assets/sounds/voices/corazon.mp3'
+import ovalSound from '../assets/sounds/voices/ovalo.mp3'
+
 export function useSounds() {
   const audioContext = ref(null)
 
@@ -77,12 +87,40 @@ export function useSounds() {
     pig: () => playAudioFile(pigSound)
   }
 
+  // Sonidos de formas geométricas
+  const shapeSounds = {
+    circle: () => playAudioFile(circleSound),
+    square: () => playAudioFile(squareSound),
+    rectangle: () => playAudioFile(rectangleSound),
+    pentagon: () => playAudioFile(pentagonSound),
+    hexagon: () => playAudioFile(hexagonSound),
+    diamond: () => playAudioFile(diamondSound),
+    heart: () => playAudioFile(heartSound),
+    oval: () => playAudioFile(ovalSound),
+    // Formas sin audio (usarán sonido sintético alternativo)
+    triangle: null,
+    star: null
+  }
+
+  // Reproducir sonido de forma (con fallback a sonido sintético si no existe)
+  const playShapeSound = (shapeId) => {
+    const soundFunction = shapeSounds[shapeId]
+    if (soundFunction) {
+      soundFunction()
+    } else {
+      // Fallback: sonido sintético suave para formas sin audio
+      playTone(600, 0.15, 'sine')
+    }
+  }
+
   return {
     playSuccess,
     playClick,
     playCorrect,
     playWin,
     animalSounds,
+    shapeSounds,
+    playShapeSound,
     initAudio
   }
 }
