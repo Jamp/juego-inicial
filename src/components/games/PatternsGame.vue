@@ -47,9 +47,11 @@ const missingIndex = ref(0)
 const correctAnswer = ref(null)
 const options = ref([])
 const showFeedback = ref(false)
+const questionKey = ref(0)
 
 const generateRound = () => {
   showFeedback.value = false
+  questionKey.value++
 
   // Crear un patrón simple (2-3 elementos que se repiten)
   const patternLength = Math.random() > 0.5 ? 2 : 3
@@ -105,7 +107,8 @@ onMounted(() => {
 
 <template>
   <GameLayout title="Completa el Patrón" :title-icon="titleIcon" bg-color="bg-gradient-to-br from-pink-100 to-yellow-100">
-    <div class="flex flex-col items-center justify-start gap-4 md:gap-8 h-full">
+    <Transition name="question" mode="out-in">
+      <div :key="questionKey" class="flex flex-col items-center justify-start gap-4 md:gap-8 h-full">
       <!-- Instrucción -->
       <div class="text-center">
         <p class="text-xl md:text-3xl font-bold text-gray-700 mb-2 md:mb-4">
@@ -162,7 +165,8 @@ onMounted(() => {
           <span class="text-3xl md:text-6xl">🌟</span>
         </div>
       </Transition>
-    </div>
+      </div>
+    </Transition>
   </GameLayout>
 </template>
 
@@ -180,6 +184,38 @@ onMounted(() => {
   }
   100% {
     transform: scale(1);
+  }
+}
+
+/* Transiciones de pregunta - Sistema de transiciones suaves */
+.question-leave-active {
+  transition: all 300ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+.question-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.question-enter-active {
+  transition: all 400ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.question-enter-from {
+  opacity: 0;
+  transform: scale(1.05);
+}
+
+/* Accesibilidad - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .question-leave-active,
+  .question-enter-active {
+    transition: opacity 200ms ease;
+  }
+
+  .question-leave-to,
+  .question-enter-from {
+    transform: none;
   }
 }
 </style>

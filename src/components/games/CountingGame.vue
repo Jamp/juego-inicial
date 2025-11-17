@@ -61,9 +61,11 @@ const targetCount = ref(0)
 const displayItems = ref([])
 const options = ref([])
 const showFeedback = ref(false)
+const questionKey = ref(0)
 
 const generateRound = () => {
   showFeedback.value = false
+  questionKey.value++
 
   // Elegir objeto aleatorio
   currentObject.value = objects[Math.floor(Math.random() * objects.length)]
@@ -151,7 +153,8 @@ onMounted(() => {
 
 <template>
   <GameLayout title="¡A Contar!" bg-color="bg-gradient-to-br from-green-100 to-blue-100">
-    <div class="flex flex-col items-center justify-start gap-4 md:gap-8 h-full">
+    <Transition name="question" mode="out-in">
+      <div :key="questionKey" class="flex flex-col items-center justify-start gap-4 md:gap-8 h-full">
       <!-- Instrucción -->
       <div class="text-center flex items-center justify-center gap-2 md:gap-3">
         <p class="text-xl md:text-3xl font-bold text-gray-700">
@@ -202,7 +205,8 @@ onMounted(() => {
           <span class="text-3xl md:text-6xl">🎯</span>
         </div>
       </Transition>
-    </div>
+      </div>
+    </Transition>
   </GameLayout>
 </template>
 
@@ -238,6 +242,38 @@ onMounted(() => {
   }
   100% {
     transform: scale(1);
+  }
+}
+
+/* Transiciones de pregunta - Sistema de transiciones suaves */
+.question-leave-active {
+  transition: all 300ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+.question-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.question-enter-active {
+  transition: all 400ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.question-enter-from {
+  opacity: 0;
+  transform: scale(1.05);
+}
+
+/* Accesibilidad - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .question-leave-active,
+  .question-enter-active {
+    transition: opacity 200ms ease;
+  }
+
+  .question-leave-to,
+  .question-enter-from {
+    transform: none;
   }
 }
 </style>
