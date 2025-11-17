@@ -17,6 +17,8 @@ import hexagonSound from '../assets/sounds/voices/hexagono.mp3'
 import diamondSound from '../assets/sounds/voices/diamante.mp3'
 import heartSound from '../assets/sounds/voices/corazon.mp3'
 import ovalSound from '../assets/sounds/voices/ovalo.mp3'
+import triangleSound from '../assets/sounds/voices/triangulo.mp3'
+import starSound from '../assets/sounds/voices/estrella.mp3'
 
 export function useSounds() {
   const audioContext = ref(null)
@@ -91,15 +93,14 @@ export function useSounds() {
   const shapeSounds = {
     circle: () => playAudioFile(circleSound),
     square: () => playAudioFile(squareSound),
+    triangle: () => playAudioFile(triangleSound),
     rectangle: () => playAudioFile(rectangleSound),
     pentagon: () => playAudioFile(pentagonSound),
     hexagon: () => playAudioFile(hexagonSound),
     diamond: () => playAudioFile(diamondSound),
+    star: () => playAudioFile(starSound),
     heart: () => playAudioFile(heartSound),
-    oval: () => playAudioFile(ovalSound),
-    // Formas sin audio (usarán sonido sintético alternativo)
-    triangle: null,
-    star: null
+    oval: () => playAudioFile(ovalSound)
   }
 
   // Reproducir sonido de forma (con fallback a sonido sintético si no existe)
