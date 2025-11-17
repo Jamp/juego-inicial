@@ -149,7 +149,7 @@ onMounted(() => {
           @click="selectItem(item)"
           :class="[
             item.color,
-            showFeedback && item.id === correctAnswer.id ? 'ring-4 md:ring-8 ring-green-400 celebrate' : ''
+            showFeedback && item.id === correctAnswer.id ? 'ring-4 md:ring-8 ring-green-400 celebrate z-10 relative' : ''
           ]"
           class="game-button w-16 h-16 md:w-24 md:h-24 rounded-xl md:rounded-2xl shadow-xl hover:shadow-2xl flex items-center justify-center text-3xl md:text-5xl"
         >

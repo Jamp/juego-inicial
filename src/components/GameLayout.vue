@@ -61,7 +61,7 @@ const goBack = () => {
       <div
         v-if="gameState.celebrating.value"
         :key="gameState.celebrationKey.value"
-        class="fixed inset-0 pointer-events-none flex items-center justify-center">
+        class="fixed inset-0 pointer-events-none flex items-center justify-center z-50">
         <div class="celebrate">
           <img :src="starPointImg" alt="Celebration" class="w-32 h-32 md:w-40 md:h-40 object-contain" />
         </div>

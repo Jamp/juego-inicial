@@ -154,7 +154,7 @@ onMounted(() => {
           :key="animal.id"
           @click="selectAnimal(animal)"
           :class="[
-            showFeedback && animal.id === currentAnimal.id ? 'ring-4 md:ring-8 ring-green-400 celebrate' : ''
+            showFeedback && animal.id === currentAnimal.id ? 'ring-4 md:ring-8 ring-green-400 celebrate z-10 relative' : ''
           ]"
           class="game-button bg-white rounded-xl md:rounded-3xl shadow-xl hover:shadow-2xl flex flex-col items-center justify-center gap-2 md:gap-3 p-3 md:p-8"
         >
