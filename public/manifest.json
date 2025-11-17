@@ -1,0 +1,22 @@
+{
+  "name": "Juegos Educativos para Niños",
+  "short_name": "Juegos Niños",
+  "description": "Mini-juegos educativos para niños de 3-5 años",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#c084fc",
+  "theme_color": "#667eea",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
