@@ -19,7 +19,7 @@ provide('sounds', sounds)
 </script>
 
 <template>
-  <div class="min-h-screen w-full flex items-center justify-center p-4">
+  <div class="w-full flex items-center justify-center p-4">
     <Transition name="fade" mode="out-in">
       <MainMenu v-if="!gameState.currentGame.value" />
       <ShapesGame v-else-if="gameState.currentGame.value === 'shapes'" />
