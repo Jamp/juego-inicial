@@ -65,24 +65,36 @@ const generateRound = () => {
   const wrongColors = colors.filter(c => c.id !== currentColor.value.id)
   const selectedWrong = wrongColors.sort(() => Math.random() - 0.5).slice(0, 3)
   options.value = [currentColor.value, ...selectedWrong].sort(() => Math.random() - 0.5)
+
+  // Reproducir el nombre del color después de un pequeño delay
+  setTimeout(() => {
+    sounds.playColorSound(currentColor.value.id)
+  }, 400)
 }
 
-const selectColor = (color) => {
-  sounds.playClick()
-
+const selectColor = async (color) => {
   if (color.id === currentColor.value.id) {
     showFeedback.value = true
-    sounds.playCorrect()
     gameState.celebrate()
+
+    // Secuencia de sonidos: 1. Nombre del color, 2. Felicitación
+    await sounds.playColorSoundAsync(currentColor.value.id)
+    sounds.playCorrect()
 
     setTimeout(() => {
       generateRound()
-    }, 1500)
+    }, 2000)
+  } else {
+    // Animación de intento (sin penalización)
+    sounds.playClick()
   }
 }
 
 onMounted(() => {
-  generateRound()
+  // La instrucción ya se reproduce en el menú, generar ronda inmediatamente
+  setTimeout(() => {
+    generateRound()
+  }, 500)
 })
 </script>
 
@@ -126,9 +138,9 @@ onMounted(() => {
       <!-- Mensaje de celebración -->
       <Transition name="bounce">
         <div v-if="showFeedback" class="text-2xl md:text-5xl font-bold text-green-600 flex items-center gap-2 md:gap-3 mt-2">
-          <span class="text-3xl md:text-6xl">✨</span>
-          ¡Perfecto!
-          <span class="text-3xl md:text-6xl">✨</span>
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
+          {{ gameState.currentCelebration.text }}
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
         </div>
       </Transition>
       </div>

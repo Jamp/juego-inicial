@@ -96,24 +96,20 @@ const generateRound = () => {
   }, 400)
 }
 
-const selectShape = (shape) => {
-  sounds.playClick()
-
+const selectShape = async (shape) => {
   if (shape.id === currentShape.value.id) {
     // Correcto!
     showFeedback.value = true
-    sounds.playCorrect()
     gameState.celebrate()
 
-    // Reproducir audio de refuerzo positivo (repetir el nombre de la forma)
-    setTimeout(() => {
-      sounds.playShapeSound(shape.id)
-    }, 300)
+    // Secuencia de sonidos: 1. Nombre de forma, 2. Felicitación
+    await sounds.playShapeSoundAsync(shape.id)
+    sounds.playCorrect()
 
     // Siguiente ronda después de un momento
     setTimeout(() => {
       generateRound()
-    }, 1500)
+    }, 2000)
   } else {
     // Animación de intento (sin penalización)
     sounds.playClick()
@@ -121,7 +117,10 @@ const selectShape = (shape) => {
 }
 
 onMounted(() => {
-  generateRound()
+  // La instrucción ya se reproduce en el menú, generar ronda inmediatamente
+  setTimeout(() => {
+    generateRound()
+  }, 500)
 })
 </script>
 
@@ -177,9 +176,9 @@ onMounted(() => {
       <!-- Mensaje de celebración -->
       <Transition name="bounce">
         <div v-if="showFeedback" class="text-2xl md:text-5xl font-bold text-green-600 flex items-center gap-2 md:gap-3 mt-2">
-          <span class="text-3xl md:text-6xl">🎉</span>
-          ¡Muy bien!
-          <span class="text-3xl md:text-6xl">🎉</span>
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
+          {{ gameState.currentCelebration.text }}
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
         </div>
       </Transition>
       </div>

@@ -55,7 +55,7 @@ const animals = [
   {
     id: 'pig',
     image: porkImg,
-    name: 'Cerdito',
+    name: 'Cerdo',
     sound: 'pig',
     text: 'Oink oink!'
   }
@@ -95,30 +95,37 @@ const playAnimalSound = () => {
   sounds.playClick()
   showSoundText.value = true
 
-  // Reproducir el sonido del animal
-  sounds.animalSounds[currentAnimal.value.sound]()
+  // Reproducir el sonido REAL del animal (ladrido, maullido, etc)
+  sounds.animalRealSounds[currentAnimal.value.sound]()
 
   setTimeout(() => {
     showSoundText.value = false
   }, 1500)
 }
 
-const selectAnimal = (animal) => {
-  sounds.playClick()
-
+const selectAnimal = async (animal) => {
   if (animal.id === currentAnimal.value.id) {
     showFeedback.value = true
-    sounds.playWin()
     gameState.celebrate()
+
+    // Secuencia de sonidos: 1. Nombre del animal (voz), 2. Felicitación
+    await sounds.playAnimalVoiceSoundAsync(animal.sound)
+    sounds.playCorrect()
 
     setTimeout(() => {
       generateRound()
     }, 2000)
+  } else {
+    // Animación de intento (sin penalización)
+    sounds.playClick()
   }
 }
 
 onMounted(() => {
-  generateRound()
+  // La instrucción ya se reproduce en el menú, generar ronda inmediatamente
+  setTimeout(() => {
+    generateRound()
+  }, 500)
 })
 </script>
 
@@ -174,9 +181,9 @@ onMounted(() => {
       <!-- Mensaje de celebración -->
       <Transition name="bounce">
         <div v-if="showFeedback" class="text-2xl md:text-5xl font-bold text-green-600 flex items-center gap-2 md:gap-3 mt-2">
-          <span class="text-3xl md:text-6xl">🎊</span>
-          ¡Correcto!
-          <span class="text-3xl md:text-6xl">🎊</span>
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
+          {{ gameState.currentCelebration.text }}
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
         </div>
       </Transition>
       </div>

@@ -63,7 +63,8 @@ const games = [
 const selectGame = (gameId) => {
   sounds.initAudio()
   sounds.playClick()
-  gameState.startGame(gameId)
+  // Reproducir instrucción ANTES de cargar el juego
+  gameState.startGame(gameId, sounds)
 }
 </script>
 

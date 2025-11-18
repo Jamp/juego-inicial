@@ -138,24 +138,36 @@ const generateRound = () => {
 
   options.value = [correctAnswer, ...wrongAnswers.slice(0, 3)]
     .sort(() => Math.random() - 0.5)
+
+  // Reproducir el número después de un pequeño delay
+  setTimeout(() => {
+    sounds.playNumberSound(targetCount.value)
+  }, 600)
 }
 
-const selectNumber = (number) => {
-  sounds.playClick()
-
+const selectNumber = async (number) => {
   if (number === targetCount.value) {
     showFeedback.value = true
-    sounds.playWin()
     gameState.celebrate()
+
+    // Secuencia de sonidos: 1. Número, 2. Felicitación
+    await sounds.playNumberSoundAsync(number)
+    sounds.playCorrect()
 
     setTimeout(() => {
       generateRound()
     }, 2000)
+  } else {
+    // Animación de intento (sin penalización)
+    sounds.playClick()
   }
 }
 
 onMounted(() => {
-  generateRound()
+  // La instrucción ya se reproduce en el menú, generar ronda inmediatamente
+  setTimeout(() => {
+    generateRound()
+  }, 500)
 })
 </script>
 
@@ -208,9 +220,9 @@ onMounted(() => {
       <!-- Mensaje de celebración -->
       <Transition name="bounce">
         <div v-if="showFeedback" class="text-2xl md:text-5xl font-bold text-green-600 flex items-center gap-2 md:gap-3 mt-2">
-          <span class="text-3xl md:text-6xl">🎯</span>
-          ¡Excelente!
-          <span class="text-3xl md:text-6xl">🎯</span>
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
+          {{ gameState.currentCelebration.text }}
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
         </div>
       </Transition>
       </div>

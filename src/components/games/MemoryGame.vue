@@ -86,7 +86,7 @@ const flipCard = (card) => {
       // Verificar si se completó el juego
       if (matchedPairs.value.length === 4) {
         setTimeout(() => {
-          sounds.playWin()
+          sounds.playCompleted()
           setTimeout(() => {
             generateRound()
           }, 2000)
@@ -108,7 +108,10 @@ const flipCard = (card) => {
 }
 
 onMounted(() => {
-  generateRound()
+  // La instrucción ya se reproduce en el menú, generar ronda inmediatamente
+  setTimeout(() => {
+    generateRound()
+  }, 500)
 })
 </script>
 

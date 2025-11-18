@@ -91,7 +91,7 @@ const selectItem = (item) => {
 
   if (item.id === correctAnswer.value.id) {
     showFeedback.value = true
-    sounds.playWin()
+    sounds.playCorrect()
     gameState.celebrate()
 
     setTimeout(() => {
@@ -101,7 +101,10 @@ const selectItem = (item) => {
 }
 
 onMounted(() => {
-  generateRound()
+  // La instrucción ya se reproduce en el menú, generar ronda inmediatamente
+  setTimeout(() => {
+    generateRound()
+  }, 500)
 })
 </script>
 
@@ -160,9 +163,9 @@ onMounted(() => {
       <!-- Mensaje de celebración -->
       <Transition name="bounce">
         <div v-if="showFeedback" class="text-2xl md:text-5xl font-bold text-green-600 flex items-center gap-2 md:gap-3 mt-2">
-          <span class="text-3xl md:text-6xl">🌟</span>
-          ¡Genial!
-          <span class="text-3xl md:text-6xl">🌟</span>
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
+          {{ gameState.currentCelebration.text }}
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
         </div>
       </Transition>
       </div>
