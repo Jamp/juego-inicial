@@ -56,6 +56,7 @@ const objects = [
 ]
 
 const currentObject = ref(null)
+const previousObject = ref(null)
 const previousCount = ref(null)
 const targetCount = ref(0)
 const displayItems = ref([])
@@ -67,8 +68,14 @@ const generateRound = () => {
   showFeedback.value = false
   questionKey.value++
 
-  // Elegir objeto aleatorio
-  currentObject.value = objects[Math.floor(Math.random() * objects.length)]
+  // Elegir objeto aleatorio diferente al anterior
+  let newObject
+  do {
+    newObject = objects[Math.floor(Math.random() * objects.length)]
+  } while (previousObject.value && newObject.name === previousObject.value.name)
+
+  previousObject.value = currentObject.value
+  currentObject.value = newObject
 
   // Número aleatorio entre 1 y 5, diferente al anterior
   let newCount

@@ -65,9 +65,9 @@ const generateRound = () => {
       basePattern.push(shuffledItems[i])
     }
   } while (previousPattern.value &&
-           basePattern.map(p => p.id).join(',') === previousPattern.value)
+           basePattern.map(p => p.id).join(',') === previousPattern.value.map(p => p.id).join(','))
 
-  previousPattern.value = basePattern.map(p => p.id).join(',')
+  previousPattern.value = basePattern
 
   // Repetir el patrón 2-3 veces
   const repetitions = Math.floor(Math.random() * 2) + 2
