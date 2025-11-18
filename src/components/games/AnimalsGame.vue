@@ -62,7 +62,8 @@ const animals = [
 ]
 
 const currentAnimal = ref(null)
-const previousAnimal = ref(null)
+const previousAnimals = ref([])
+const HISTORY_SIZE = 2
 const options = ref([])
 const showFeedback = ref(false)
 const showSoundText = ref(false)
@@ -73,13 +74,13 @@ const generateRound = () => {
   showSoundText.value = false
   questionKey.value++
 
-  // Elegir animal aleatorio diferente al anterior
+  // Elegir animal aleatorio diferente a los últimos 2
   let newAnimal
   do {
     newAnimal = animals[Math.floor(Math.random() * animals.length)]
-  } while (previousAnimal.value && newAnimal.id === previousAnimal.value.id)
+  } while (previousAnimals.value.some(prev => prev.id === newAnimal.id))
 
-  previousAnimal.value = currentAnimal.value
+  previousAnimals.value = [newAnimal, ...previousAnimals.value].slice(0, HISTORY_SIZE)
   currentAnimal.value = newAnimal
 
   // Crear 4 opciones aleatorias incluyendo la correcta

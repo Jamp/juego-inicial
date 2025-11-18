@@ -42,7 +42,8 @@ const colors = [
 ]
 
 const currentColor = ref(null)
-const previousColor = ref(null)
+const previousColors = ref([])
+const HISTORY_SIZE = 2
 const options = ref([])
 const showFeedback = ref(false)
 const questionKey = ref(0)
@@ -51,13 +52,13 @@ const generateRound = () => {
   showFeedback.value = false
   questionKey.value++
 
-  // Elegir un color aleatorio diferente al anterior
+  // Elegir un color aleatorio diferente a los últimos 2
   let newColor
   do {
     newColor = colors[Math.floor(Math.random() * colors.length)]
-  } while (previousColor.value && newColor.id === previousColor.value.id)
+  } while (previousColors.value.some(prev => prev.id === newColor.id))
 
-  previousColor.value = currentColor.value
+  previousColors.value = [newColor, ...previousColors.value].slice(0, HISTORY_SIZE)
   currentColor.value = newColor
 
   // Crear 4 opciones aleatorias incluyendo la correcta

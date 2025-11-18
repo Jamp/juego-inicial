@@ -56,8 +56,9 @@ const objects = [
 ]
 
 const currentObject = ref(null)
-const previousObject = ref(null)
-const previousCount = ref(null)
+const previousObjects = ref([])
+const previousCounts = ref([])
+const HISTORY_SIZE = 2
 const targetCount = ref(0)
 const displayItems = ref([])
 const options = ref([])
@@ -68,22 +69,22 @@ const generateRound = () => {
   showFeedback.value = false
   questionKey.value++
 
-  // Elegir objeto aleatorio diferente al anterior
+  // Elegir objeto aleatorio diferente a los últimos 2
   let newObject
   do {
     newObject = objects[Math.floor(Math.random() * objects.length)]
-  } while (previousObject.value && newObject.name === previousObject.value.name)
+  } while (previousObjects.value.some(prev => prev.name === newObject.name))
 
-  previousObject.value = currentObject.value
+  previousObjects.value = [newObject, ...previousObjects.value].slice(0, HISTORY_SIZE)
   currentObject.value = newObject
 
-  // Número aleatorio entre 1 y 5, diferente al anterior
+  // Número aleatorio entre 1 y 5, diferente a los últimos 2
   let newCount
   do {
     newCount = Math.floor(Math.random() * 5) + 1
-  } while (previousCount.value && newCount === previousCount.value)
+  } while (previousCounts.value.includes(newCount))
 
-  previousCount.value = targetCount.value
+  previousCounts.value = [newCount, ...previousCounts.value].slice(0, HISTORY_SIZE)
   targetCount.value = newCount
 
   // Crear array de items para mostrar con posiciones aleatorias sin superposición

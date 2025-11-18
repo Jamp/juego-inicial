@@ -63,7 +63,8 @@ const shapes = [
 ]
 
 const currentShape = ref(null)
-const previousShape = ref(null)
+const previousShapes = ref([])
+const HISTORY_SIZE = 3
 const options = ref([])
 const showFeedback = ref(false)
 const questionKey = ref(0)
@@ -72,13 +73,13 @@ const generateRound = () => {
   showFeedback.value = false
   questionKey.value++
 
-  // Elegir una forma aleatoria diferente a la anterior
+  // Elegir una forma aleatoria diferente a las últimas 3
   let newShape
   do {
     newShape = shapes[Math.floor(Math.random() * shapes.length)]
-  } while (previousShape.value && newShape.id === previousShape.value.id)
+  } while (previousShapes.value.some(prev => prev.id === newShape.id))
 
-  previousShape.value = currentShape.value
+  previousShapes.value = [newShape, ...previousShapes.value].slice(0, HISTORY_SIZE)
   currentShape.value = newShape
 
   // Seleccionar 4 opciones: la correcta + 3 aleatorias diferentes
