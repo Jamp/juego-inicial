@@ -1,5 +1,5 @@
 <script setup>
-import { ref, inject, onMounted } from 'vue'
+import { ref, inject, onMounted, onBeforeUnmount } from 'vue'
 import GameLayout from '../GameLayout.vue'
 import questionImg from '../../assets/images/question.png'
 import memoryImg from '../../assets/images/memory.png'
@@ -19,14 +19,17 @@ const allAnimalImages = [
   cowImg,
   sheepImg,
   porkImg,
-  foxImg, 
-  catImg, 
+  foxImg,
+  catImg,
   pandaImg,
   chickenImg
 ]
 
 const gameState = inject('gameState')
 const sounds = inject('sounds')
+
+// Referencias a timeouts activos para limpieza
+const activeTimeouts = ref([])
 
 const titleIcon = memoryImg
 
@@ -85,33 +88,43 @@ const flipCard = (card) => {
 
       // Verificar si se completó el juego
       if (matchedPairs.value.length === 4) {
-        setTimeout(() => {
+        const timeoutId1 = setTimeout(() => {
           sounds.playCompleted()
-          setTimeout(() => {
+          const timeoutId2 = setTimeout(() => {
             generateRound()
           }, 2000)
+          activeTimeouts.value.push(timeoutId2)
         }, 500)
+        activeTimeouts.value.push(timeoutId1)
       }
 
       flippedCards.value = []
       canFlip.value = true
     } else {
       // No coinciden, voltear de vuelta después de un momento
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         card1.isFlipped = false
         card2.isFlipped = false
         flippedCards.value = []
         canFlip.value = true
       }, 1000)
+      activeTimeouts.value.push(timeoutId)
     }
   }
 }
 
 onMounted(() => {
-  // La instrucción ya se reproduce en el menú, generar ronda inmediatamente
-  setTimeout(() => {
+  // Esperar un poco más para que la pantalla de carga y el juego estén sincronizados
+  const timeoutId = setTimeout(() => {
     generateRound()
-  }, 500)
+  }, 800)
+  activeTimeouts.value.push(timeoutId)
+})
+
+onBeforeUnmount(() => {
+  // Limpiar todos los timeouts activos al desmontar el componente
+  activeTimeouts.value.forEach(timeoutId => clearTimeout(timeoutId))
+  activeTimeouts.value = []
 })
 </script>
 
@@ -166,9 +179,9 @@ onMounted(() => {
       <!-- Mensaje de celebración -->
       <Transition name="bounce">
         <div v-if="matchedPairs.length === 4" class="text-2xl md:text-5xl font-bold text-green-600 flex items-center gap-2 md:gap-3 mt-2">
-          <span class="text-3xl md:text-6xl">🎊</span>
-          ¡Completado!
-          <span class="text-3xl md:text-6xl">🎊</span>
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.value.emoji }}</span>
+          {{ gameState.currentCelebration.value.text }}
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.value.emoji }}</span>
         </div>
       </Transition>
       </div>

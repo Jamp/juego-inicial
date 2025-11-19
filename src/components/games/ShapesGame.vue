@@ -1,11 +1,14 @@
 <script setup>
-import { ref, inject, onMounted } from 'vue'
+import { ref, inject, onMounted, onBeforeUnmount } from 'vue'
 import GameLayout from '../GameLayout.vue'
 import ShapeIcon from './ShapeIcon.vue'
 import shapeImg from '../../assets/images/shape.png'
 
 const gameState = inject('gameState')
 const sounds = inject('sounds')
+
+// Referencias a timeouts activos para limpieza
+const activeTimeouts = ref([])
 
 const titleIcon = shapeImg
 
@@ -91,9 +94,10 @@ const generateRound = () => {
   options.value = [newShape, ...wrongOptions].sort(() => Math.random() - 0.5)
 
   // Reproducir audio de la forma después de un pequeño delay (para dar tiempo a la animación)
-  setTimeout(() => {
+  const timeoutId = setTimeout(() => {
     sounds.playShapeSound(newShape.id)
   }, 400)
+  activeTimeouts.value.push(timeoutId)
 }
 
 const selectShape = async (shape) => {
@@ -102,14 +106,15 @@ const selectShape = async (shape) => {
     showFeedback.value = true
     gameState.celebrate()
 
-    // Secuencia de sonidos: 1. Nombre de forma, 2. Felicitación
+    // Secuencia de sonidos: 1. Nombre de forma, 2. Felicitación específica
     await sounds.playShapeSoundAsync(shape.id)
-    sounds.playCorrect()
+    sounds.playCelebration(gameState.currentCelebration.value.sound)
 
     // Siguiente ronda después de un momento
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       generateRound()
     }, 2000)
+    activeTimeouts.value.push(timeoutId)
   } else {
     // Animación de intento (sin penalización)
     sounds.playClick()
@@ -117,10 +122,17 @@ const selectShape = async (shape) => {
 }
 
 onMounted(() => {
-  // La instrucción ya se reproduce en el menú, generar ronda inmediatamente
-  setTimeout(() => {
+  // Esperar un poco más para que la pantalla de carga y el juego estén sincronizados
+  const timeoutId = setTimeout(() => {
     generateRound()
-  }, 500)
+  }, 800)
+  activeTimeouts.value.push(timeoutId)
+})
+
+onBeforeUnmount(() => {
+  // Limpiar todos los timeouts activos al desmontar el componente
+  activeTimeouts.value.forEach(timeoutId => clearTimeout(timeoutId))
+  activeTimeouts.value = []
 })
 </script>
 
@@ -176,9 +188,9 @@ onMounted(() => {
       <!-- Mensaje de celebración -->
       <Transition name="bounce">
         <div v-if="showFeedback" class="text-2xl md:text-5xl font-bold text-green-600 flex items-center gap-2 md:gap-3 mt-2">
-          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
-          {{ gameState.currentCelebration.text }}
-          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.value.emoji }}</span>
+          {{ gameState.currentCelebration.value.text }}
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.value.emoji }}</span>
         </div>
       </Transition>
       </div>

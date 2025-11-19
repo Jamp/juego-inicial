@@ -1,10 +1,13 @@
 <script setup>
-import { ref, inject, onMounted } from 'vue'
+import { ref, inject, onMounted, onBeforeUnmount } from 'vue'
 import GameLayout from '../GameLayout.vue'
 import colorsImg from '../../assets/images/colors.png'
 
 const gameState = inject('gameState')
 const sounds = inject('sounds')
+
+// Referencias a timeouts activos para limpieza
+const activeTimeouts = ref([])
 
 const titleIcon = colorsImg
 
@@ -67,9 +70,10 @@ const generateRound = () => {
   options.value = [currentColor.value, ...selectedWrong].sort(() => Math.random() - 0.5)
 
   // Reproducir el nombre del color después de un pequeño delay
-  setTimeout(() => {
+  const timeoutId = setTimeout(() => {
     sounds.playColorSound(currentColor.value.id)
   }, 400)
+  activeTimeouts.value.push(timeoutId)
 }
 
 const selectColor = async (color) => {
@@ -77,13 +81,14 @@ const selectColor = async (color) => {
     showFeedback.value = true
     gameState.celebrate()
 
-    // Secuencia de sonidos: 1. Nombre del color, 2. Felicitación
+    // Secuencia de sonidos: 1. Nombre del color, 2. Felicitación específica
     await sounds.playColorSoundAsync(currentColor.value.id)
-    sounds.playCorrect()
+    sounds.playCelebration(gameState.currentCelebration.value.sound)
 
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       generateRound()
     }, 2000)
+    activeTimeouts.value.push(timeoutId)
   } else {
     // Animación de intento (sin penalización)
     sounds.playClick()
@@ -91,10 +96,17 @@ const selectColor = async (color) => {
 }
 
 onMounted(() => {
-  // La instrucción ya se reproduce en el menú, generar ronda inmediatamente
-  setTimeout(() => {
+  // Esperar un poco más para que la pantalla de carga y el juego estén sincronizados
+  const timeoutId = setTimeout(() => {
     generateRound()
-  }, 500)
+  }, 800)
+  activeTimeouts.value.push(timeoutId)
+})
+
+onBeforeUnmount(() => {
+  // Limpiar todos los timeouts activos al desmontar el componente
+  activeTimeouts.value.forEach(timeoutId => clearTimeout(timeoutId))
+  activeTimeouts.value = []
 })
 </script>
 
@@ -138,9 +150,9 @@ onMounted(() => {
       <!-- Mensaje de celebración -->
       <Transition name="bounce">
         <div v-if="showFeedback" class="text-2xl md:text-5xl font-bold text-green-600 flex items-center gap-2 md:gap-3 mt-2">
-          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
-          {{ gameState.currentCelebration.text }}
-          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.value.emoji }}</span>
+          {{ gameState.currentCelebration.value.text }}
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.value.emoji }}</span>
         </div>
       </Transition>
       </div>

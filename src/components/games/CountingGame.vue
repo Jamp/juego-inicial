@@ -1,5 +1,5 @@
 <script setup>
-import { ref, inject, onMounted, computed } from 'vue'
+import { ref, inject, onMounted, onBeforeUnmount } from 'vue'
 import GameLayout from '../GameLayout.vue'
 
 // Importar imágenes
@@ -15,6 +15,9 @@ import dogImg from '../../assets/images/dog.png'
 
 const gameState = inject('gameState')
 const sounds = inject('sounds')
+
+// Referencias a timeouts activos para limpieza
+const activeTimeouts = ref([])
 
 const objects = [
   {
@@ -140,9 +143,10 @@ const generateRound = () => {
     .sort(() => Math.random() - 0.5)
 
   // Reproducir el número después de un pequeño delay
-  setTimeout(() => {
+  const timeoutId = setTimeout(() => {
     sounds.playNumberSound(targetCount.value)
   }, 600)
+  activeTimeouts.value.push(timeoutId)
 }
 
 const selectNumber = async (number) => {
@@ -150,13 +154,14 @@ const selectNumber = async (number) => {
     showFeedback.value = true
     gameState.celebrate()
 
-    // Secuencia de sonidos: 1. Número, 2. Felicitación
+    // Secuencia de sonidos: 1. Número, 2. Felicitación específica
     await sounds.playNumberSoundAsync(number)
-    sounds.playCorrect()
+    sounds.playCelebration(gameState.currentCelebration.value.sound)
 
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       generateRound()
     }, 2000)
+    activeTimeouts.value.push(timeoutId)
   } else {
     // Animación de intento (sin penalización)
     sounds.playClick()
@@ -164,11 +169,19 @@ const selectNumber = async (number) => {
 }
 
 onMounted(() => {
-  // La instrucción ya se reproduce en el menú, generar ronda inmediatamente
-  setTimeout(() => {
+  // Esperar un poco más para que la pantalla de carga y el juego estén sincronizados
+  const timeoutId = setTimeout(() => {
     generateRound()
-  }, 500)
+  }, 800)
+  activeTimeouts.value.push(timeoutId)
 })
+
+onBeforeUnmount(() => {
+  // Limpiar todos los timeouts activos al desmontar el componente
+  activeTimeouts.value.forEach(timeoutId => clearTimeout(timeoutId))
+  activeTimeouts.value = []
+})
+import qrImage from '../../assets/qr.png'
 </script>
 
 <template>
@@ -196,8 +209,7 @@ onMounted(() => {
             left: item.left + '%',
             animationDelay: item.delay + 's'
           }"
-          class="absolute pop-in"
-        >
+          class="absolute pop-in">
           <img v-if="currentObject" :src="currentObject.image" :alt="currentObject.name" class="w-10 h-10 md:w-16 md:h-16 object-contain" />
         </div>
       </div>
@@ -211,8 +223,7 @@ onMounted(() => {
           :class="[
             showFeedback && number === targetCount ? 'ring-4 md:ring-8 ring-green-500 celebrate z-10 relative' : ''
           ]"
-          class="game-button w-16 h-16 md:w-24 md:h-24 bg-gradient-to-br from-blue-400 to-purple-500 text-white rounded-xl md:rounded-2xl shadow-xl hover:shadow-2xl flex items-center justify-center text-3xl md:text-5xl font-bold"
-        >
+          class="game-button w-16 h-16 md:w-24 md:h-24 bg-gradient-to-br from-blue-400 to-purple-500 text-white rounded-xl md:rounded-2xl shadow-xl hover:shadow-2xl flex items-center justify-center text-3xl md:text-5xl font-bold">
           {{ number }}
         </button>
       </div>
@@ -220,11 +231,22 @@ onMounted(() => {
       <!-- Mensaje de celebración -->
       <Transition name="bounce">
         <div v-if="showFeedback" class="text-2xl md:text-5xl font-bold text-green-600 flex items-center gap-2 md:gap-3 mt-2">
-          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
-          {{ gameState.currentCelebration.text }}
-          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.emoji }}</span>
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.value.emoji }}</span>
+          {{ gameState.currentCelebration.value.text }}
+          <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.value.emoji }}</span>
         </div>
       </Transition>
+      <div class="bg-gradient-to-br from-blue-400 to-purple-500 text-white shadow-xl hover:shadow-2xl flex flex-col items-center justify-center p-12">
+          <p class="font-bold text-4xl text-white mb-2">
+            Juego de Educativo de Papá
+          </p>
+          <img :src="qrImage" class="w-82 h-82" />
+          <p class="font-bold text-4xl text-white text-center mt-2">
+            Sofia Marval
+            <br>
+            4 años
+          </p>
+        </div>
       </div>
     </Transition>
   </GameLayout>
