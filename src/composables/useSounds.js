@@ -12,7 +12,7 @@ import pigRealSound from '../assets/sounds/animals/pig.mp3'
 import dogVoiceSound from '../assets/sounds/processed/perro.mp3'
 import catVoiceSound from '../assets/sounds/processed/gato.mp3'
 import cowVoiceSound from '../assets/sounds/processed/vaca.mp3'
-import birdVoiceSound from '../assets/sounds/processed/pollo.mp3'
+import birdVoiceSound from '../assets/sounds/processed/pollito.mp3'
 import sheepVoiceSound from '../assets/sounds/processed/oveja.mp3'
 import pigVoiceSound from '../assets/sounds/processed/cerdo.mp3'
 
@@ -50,6 +50,13 @@ import dosSound from '../assets/sounds/processed/dos.mp3'
 import tresSound from '../assets/sounds/processed/tres.mp3'
 import cuatroSound from '../assets/sounds/processed/cuatro.mp3'
 import cincoSound from '../assets/sounds/processed/cinco.mp3'
+
+// Importar archivos de audio de "cuántos hay" para el juego de contar
+import cuantosGatosSound from '../assets/sounds/processed/cuantos-gatos-hay.mp3'
+import cuantosGlobosSound from '../assets/sounds/processed/cuantos-globos-hay.mp3'
+import cuantosPerrosSound from '../assets/sounds/processed/cuantos-perros-hay.mp3'
+import cuantosPollitosSound from '../assets/sounds/processed/cuantos-pollitos-hay.mp3'
+import cuantosSolesSound from '../assets/sounds/processed/cuantos-soles-hay.mp3'
 
 // Importar archivos de audio de instrucciones de juegos
 import reconoceFormasSound from '../assets/sounds/processed/reconoce-formas.mp3'
@@ -296,6 +303,26 @@ export function useSounds() {
     }
   }
 
+  // Mapa de audios "cuántos X hay" para el juego de contar
+  const cuantosHaySounds = {
+    'gatitos': cuantosGatosSound,
+    'globos': cuantosGlobosSound,
+    'Perritos': cuantosPerrosSound,
+    'Pollitos': cuantosPollitosSound,
+    'soles': cuantosSolesSound
+  }
+
+  // Reproducir pregunta "¿Cuántos X hay?" basado en el nombre del objeto
+  const playCuantosHay = (objectName) => {
+    const sound = cuantosHaySounds[objectName]
+    if (sound) {
+      playAudioFile(sound)
+    } else {
+      // Fallback: sonido sintético si no hay audio específico
+      playTone(650, 0.15, 'sine')
+    }
+  }
+
   // Reproducir sonido de voz de animal async (para secuencias)
   const playAnimalVoiceSoundAsync = async (animalId) => {
     const audioMap = {
@@ -350,6 +377,7 @@ export function useSounds() {
     numberSounds,
     playNumberSound,
     playNumberSoundAsync,
+    playCuantosHay,
     gameInstructions,
     playGameInstruction,
     initAudio

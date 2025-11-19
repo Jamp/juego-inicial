@@ -142,9 +142,9 @@ const generateRound = () => {
   options.value = [correctAnswer, ...wrongAnswers.slice(0, 3)]
     .sort(() => Math.random() - 0.5)
 
-  // Reproducir el número después de un pequeño delay
+  // Reproducir pregunta "¿Cuántos X hay?" después de un pequeño delay
   const timeoutId = setTimeout(() => {
-    sounds.playNumberSound(targetCount.value)
+    sounds.playCuantosHay(currentObject.value.name)
   }, 600)
   activeTimeouts.value.push(timeoutId)
 }
