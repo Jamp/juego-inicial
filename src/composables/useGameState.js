@@ -50,7 +50,7 @@ export function useGameState() {
     celebrationKey.value = 0
   }
 
-  const celebrate = () => {
+  const celebrate = (sounds = null) => {
     score.value++
     celebrating.value = true
     celebrationKey.value++
@@ -58,6 +58,11 @@ export function useGameState() {
     // Seleccionar una felicitación aleatoria
     const randomIndex = Math.floor(Math.random() * celebrations.length)
     currentCelebration.value = celebrations[randomIndex]
+
+    // Reproducir el audio correspondiente si se proporcionó el objeto sounds
+    if (sounds && sounds.playCelebration) {
+      sounds.playCelebration(currentCelebration.value.sound)
+    }
 
     // Ocultar automáticamente después de la animación (600ms)
     setTimeout(() => {

@@ -80,22 +80,19 @@ const flipCard = (card) => {
 
     if (card1.image === card2.image) {
       // ¡Par encontrado!
-      sounds.playCorrect()
       card1.isMatched = true
       card2.isMatched = true
       matchedPairs.value.push(card1.image)
-      gameState.celebrate()
+
+      // Celebrar con audio sincronizado
+      gameState.celebrate(sounds)
 
       // Verificar si se completó el juego
       if (matchedPairs.value.length === 4) {
-        const timeoutId1 = setTimeout(() => {
-          sounds.playCompleted()
-          const timeoutId2 = setTimeout(() => {
-            generateRound()
-          }, 2000)
-          activeTimeouts.value.push(timeoutId2)
-        }, 500)
-        activeTimeouts.value.push(timeoutId1)
+        const timeoutId = setTimeout(() => {
+          generateRound()
+        }, 2500)
+        activeTimeouts.value.push(timeoutId)
       }
 
       flippedCards.value = []
@@ -165,14 +162,14 @@ onBeforeUnmount(() => {
       <!-- Progreso -->
       <div class="flex gap-2 md:gap-3">
         <div
-          v-for="(pair, index) in 4"
+          v-for="index in 4"
           :key="index"
           :class="[
-            matchedPairs.length > index ? 'bg-green-400 scale-110' : 'bg-gray-300'
+            matchedPairs.length >= index ? 'bg-green-400 scale-110' : 'bg-gray-300'
           ]"
           class="w-10 h-10 md:w-14 md:h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-300"
         >
-          <span v-if="matchedPairs.length > index" class="text-xl md:text-3xl">✓</span>
+          <span v-if="matchedPairs.length >= index" class="text-xl md:text-3xl">✓</span>
         </div>
       </div>
 
