@@ -120,19 +120,29 @@ export function useSounds() {
     playTone(800, 0.05, 'square')
   }
 
-  // Array de audios de celebración para selección aleatoria
-  const celebrationSounds = [
-    correctoSound,
-    excelenteSound,
-    genialSound,
-    muyBienSound,
-    perfectoSound
-  ]
+  // Mapa de sonidos de celebración por ID
+  const celebrationSoundsMap = {
+    'correcto': correctoSound,
+    'excelente': excelenteSound,
+    'genial': genialSound,
+    'muy-bien': muyBienSound,
+    'perfecto': perfectoSound
+  }
 
+  // Reproducir sonido de celebración específico
+  const playCelebration = (soundId) => {
+    const sound = celebrationSoundsMap[soundId]
+    if (sound) {
+      playAudioFile(sound)
+    } else {
+      // Fallback: usar correcto si no se encuentra el sonido
+      playAudioFile(correctoSound)
+    }
+  }
+
+  // Mantener playCorrect para compatibilidad (ahora solo reproduce correcto)
   const playCorrect = () => {
-    // Seleccionar un audio aleatorio de celebración
-    const randomSound = celebrationSounds[Math.floor(Math.random() * celebrationSounds.length)]
-    playAudioFile(randomSound)
+    playAudioFile(correctoSound)
   }
 
   const playCompleted = () => {
@@ -325,6 +335,7 @@ export function useSounds() {
     playSuccess,
     playClick,
     playCorrect,
+    playCelebration,
     playCompleted,
     playWin,
     animalRealSounds,

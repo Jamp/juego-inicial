@@ -6,28 +6,35 @@ export function useGameState() {
   const celebrating = ref(false)
   const celebrationKey = ref(0)
 
-  // Array de felicitaciones con sus emojis
+  // Array de felicitaciones con sus emojis y sonidos
   const celebrations = [
-    { text: '¡Correcto!', emoji: '🎊' },
-    { text: '¡Excelente!', emoji: '🌟' },
-    { text: '¡Genial!', emoji: '✨' },
-    { text: '¡Muy bien!', emoji: '🎉' },
-    { text: '¡Perfecto!', emoji: '💫' }
+    { text: '¡Correcto!', emoji: '🎊', sound: 'correcto' },
+    { text: '¡Excelente!', emoji: '🌟', sound: 'excelente' },
+    { text: '¡Genial!', emoji: '✨', sound: 'genial' },
+    { text: '¡Muy bien!', emoji: '🎉', sound: 'muy-bien' },
+    { text: '¡Perfecto!', emoji: '💫', sound: 'perfecto' }
   ]
 
   const currentCelebration = ref(celebrations[0])
+  const isLoadingGame = ref(false)
 
   const startGame = (gameName, sounds = null) => {
     // Si se proporcionan sounds, reproducir instrucción primero
     if (sounds) {
+      isLoadingGame.value = true
       sounds.playGameInstruction(gameName)
-      // Cambiar de vista después de que empiece la instrucción
+      // Cambiar de vista después de que termine la instrucción (~2 segundos)
       setTimeout(() => {
         currentGame.value = gameName
         score.value = 0
         celebrating.value = false
         celebrationKey.value = 0
-      }, 500)
+        // Esperar más tiempo antes de desactivar el loading para que el juego esté completamente listo
+        // El juego espera 800ms en onMounted + 400-600ms de audio = ~1400ms total
+        setTimeout(() => {
+          isLoadingGame.value = false
+        }, 1500)
+      }, 2000)
     } else {
       // Fallback: cambiar inmediatamente (para compatibilidad)
       currentGame.value = gameName
@@ -64,6 +71,7 @@ export function useGameState() {
     celebrating,
     celebrationKey,
     currentCelebration,
+    isLoadingGame,
     startGame,
     goToMenu,
     celebrate
