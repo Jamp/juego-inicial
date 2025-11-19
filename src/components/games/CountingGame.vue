@@ -8,7 +8,7 @@ import starImg from '../../assets/images/star.png'
 import ballonImg from '../../assets/images/ballon.png'
 import catImg from '../../assets/images/cat.png'
 import flowerImg from '../../assets/images/flower.png'
-import sunImg from '../../assets/images/sun.png'
+import moonImg from '../../assets/images/moon.png'
 import cowImg from '../../assets/images/cow.png'
 import chickenImg from '../../assets/images/chicken.png'
 import dogImg from '../../assets/images/dog.png'
@@ -41,8 +41,8 @@ const objects = [
     name: 'flores'
   },
   {
-    image: sunImg,
-    name: 'soles'
+    image: moonImg,
+    name: 'lunas'
   },
   {
     image: cowImg,
@@ -236,17 +236,6 @@ import qrImage from '../../assets/qr.png'
           <span class="text-3xl md:text-6xl">{{ gameState.currentCelebration.value.emoji }}</span>
         </div>
       </Transition>
-      <div class="bg-gradient-to-br from-blue-400 to-purple-500 text-white shadow-xl hover:shadow-2xl flex flex-col items-center justify-center p-12">
-          <p class="font-bold text-4xl text-white mb-2">
-            Juego de Educativo de Papá
-          </p>
-          <img :src="qrImage" class="w-82 h-82" />
-          <p class="font-bold text-4xl text-white text-center mt-2">
-            Sofia Marval
-            <br>
-            4 años
-          </p>
-        </div>
       </div>
     </Transition>
   </GameLayout>

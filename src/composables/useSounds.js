@@ -52,11 +52,15 @@ import cuatroSound from '../assets/sounds/processed/cuatro.mp3'
 import cincoSound from '../assets/sounds/processed/cinco.mp3'
 
 // Importar archivos de audio de "cuántos hay" para el juego de contar
-import cuantosGatosSound from '../assets/sounds/processed/cuantos-gatos-hay.mp3'
+import cuantosManzanasSound from '../assets/sounds/processed/cuantos-manzanas-hay.mp3'
+import cuantosEstrellasSound from '../assets/sounds/processed/cuantos-estrellas-hay.mp3'
 import cuantosGlobosSound from '../assets/sounds/processed/cuantos-globos-hay.mp3'
+import cuantosGatosSound from '../assets/sounds/processed/cuantos-gatos-hay.mp3'
+import cuantosFloresSound from '../assets/sounds/processed/cuantos-flores-hay.mp3'
+import cuantosLunasSound from '../assets/sounds/processed/cuantos-lunas-hay.mp3'
+import cuantosVacasSound from '../assets/sounds/processed/cuantos-vacas-hay.mp3'
 import cuantosPerrosSound from '../assets/sounds/processed/cuantos-perros-hay.mp3'
 import cuantosPollitosSound from '../assets/sounds/processed/cuantos-pollitos-hay.mp3'
-import cuantosSolesSound from '../assets/sounds/processed/cuantos-soles-hay.mp3'
 
 // Importar archivos de audio de instrucciones de juegos
 import reconoceFormasSound from '../assets/sounds/processed/reconoce-formas.mp3'
@@ -305,11 +309,15 @@ export function useSounds() {
 
   // Mapa de audios "cuántos X hay" para el juego de contar
   const cuantosHaySounds = {
-    'gatitos': cuantosGatosSound,
+    'manzanas': cuantosManzanasSound,
+    'estrellas': cuantosEstrellasSound,
     'globos': cuantosGlobosSound,
+    'gatitos': cuantosGatosSound,
+    'flores': cuantosFloresSound,
+    'lunas': cuantosLunasSound,
+    'Vaquitas': cuantosVacasSound,
     'Perritos': cuantosPerrosSound,
-    'Pollitos': cuantosPollitosSound,
-    'soles': cuantosSolesSound
+    'Pollitos': cuantosPollitosSound
   }
 
   // Reproducir pregunta "¿Cuántos X hay?" basado en el nombre del objeto
